@@ -20,20 +20,46 @@
             android:id="@+id/home_shirt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/shirt1"
+            android:src="@drawable/tshirt_v_template"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/home_sticker"
+        <com.reactive.fyp.View.MaskView
+            android:id="@+id/home_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="30dp"
+            app:layout_constraintLeft_toLeftOf="@id/home_shirt"
+            app:layout_constraintRight_toRightOf="@id/home_shirt"
+            app:layout_constraintTop_toTopOf="@id/home_shirt"
+            app:layout_constraintBottom_toBottomOf="@id/home_shirt"
+            >
+            <ImageView
+                android:id="@+id/home_sticker"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+        </com.reactive.fyp.View.MaskView>
+
+        <com.reactive.fyp.View.MaskViewText
+            android:id="@+id/text_mask_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="@id/home_shirt"
             app:layout_constraintRight_toRightOf="@id/home_shirt"
             app:layout_constraintTop_toTopOf="@id/home_shirt"
+            android:padding="40dp"
             app:layout_constraintBottom_toBottomOf="@id/home_shirt"
-            />
+            >
+            <TextView
+                android:id="@+id/home_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="40sp"
+                />
+        </com.reactive.fyp.View.MaskViewText>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -156,6 +182,7 @@
                 >
 
                 <RelativeLayout
+                    android:id="@+id/textwrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

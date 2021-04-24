@@ -1,11 +1,20 @@
 package com.reactive.fyp.Fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,31 +23,88 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
 import com.reactive.fyp.Activities.DesignActivity;
 import com.reactive.fyp.Adapter.ShirtAdapter;
 import com.reactive.fyp.Interfaces.ShirtListener;
 import com.reactive.fyp.R;
 
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import yuku.ambilwarna.AmbilWarnaDialog;
+
 
 public class ShirtsFragment extends Fragment implements ShirtListener {
 
-    RecyclerView recyclerView;
+    final String TAG = ShirtsFragment.class.getSimpleName();
     List<Drawable> list=new ArrayList<>();
-    ShirtAdapter adapter;
     DesignActivity designActivity;
+    int currentColor;
+    ImageView paint ;
+    Button front,back;
+    ColorPickerSeekBar colorPickerSeekBar;
+    boolean isTrack;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =getLayoutInflater().inflate(R.layout.shirts_layout,container,false);
         designActivity=(DesignActivity)getActivity();
-        recyclerView=view.findViewById(R.id.recyclerView);
-        recyclerView.hasFixedSize();
-        recyclerView.
-                setLayoutManager(new LinearLayoutManager(requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false));
+
+        colorPickerSeekBar = view.findViewById(R.id.colorpicker);
+        paint = view.findViewById(R.id.paint);
+        front = view.findViewById(R.id.front);
+        back = view.findViewById(R.id.back);
+        colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
+            @Override
+            public void onColorChanged(SeekBar seekBar, int color, boolean fromUser) {
+                Log.i(TAG,"on change");
+                if (isTrack){
+                    designActivity.home_shirt.setColorFilter(color, PorterDuff.Mode.OVERLAY);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                Log.i(TAG,"start tracking");
+                isTrack = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.i(TAG,"stop tracking");
+                isTrack = false;
+            }
+        });
+
+        paint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
+
+        front.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                designActivity.home_shirt
+                        .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
+                        R.drawable.tshirt_v_template));
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                designActivity.home_shirt
+                        .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
+                        R.drawable.tshirt_kids_template));
+            }
+        });
+
+
 
         return view;
     }
@@ -46,10 +112,6 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
     @Override
     public void onStart() {
         super.onStart();
-        loadList();
-        adapter= new ShirtAdapter(requireContext(),list);
-        adapter.setListener(this);
-        recyclerView.setAdapter(adapter);
     }
 
     void loadList(){
@@ -68,5 +130,22 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
     @Override
     public void OnShirtClick(Drawable drawable) {
         designActivity.home_shirt.setImageDrawable(drawable);
+    }
+
+    private void openDialog(){
+        AmbilWarnaDialog dialog = new AmbilWarnaDialog(getContext(), currentColor, false, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+
+            }
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                designActivity.home_shirt.setColorFilter(color, PorterDuff.Mode.OVERLAY);
+                Window win = Objects.requireNonNull(getActivity()).getWindow();
+                win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                //win.setStatusBarColor(color);
+            }
+        });
+        dialog.show();
     }
 }

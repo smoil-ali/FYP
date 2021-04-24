@@ -1,2 +1,3 @@
+include ':colorpicker-0.5'
 include ':app'
 rootProject.name = "FYP"

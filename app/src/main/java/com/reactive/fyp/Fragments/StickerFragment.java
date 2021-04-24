@@ -3,9 +3,11 @@ package com.reactive.fyp.Fragments;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -81,6 +83,11 @@ public class StickerFragment extends Fragment implements StickerListener {
 
     @Override
     public void OnStickerClick(Bitmap bitmap) {
+        designActivity.maskView.setVisibility(View.VISIBLE);
+        designActivity.maskView.setRotation(0);
         designActivity.home_sticker.setImageBitmap(bitmap);
+        designActivity.home_sticker.setScaleY(1);
     }
+
+
 }

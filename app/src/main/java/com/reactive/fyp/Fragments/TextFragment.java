@@ -28,16 +28,15 @@ import com.reactive.fyp.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TextFragment extends Fragment implements TextClickListener {
+public class
+TextFragment extends Fragment implements TextClickListener {
 
     final String TAG = TextFragment.class.getSimpleName();
-    EditText text;
     RecyclerView recyclerView;
     TextAdapter adapter;
     List<String> list = new ArrayList<>();
     List<Integer> fontList = new ArrayList<Integer>();
     DesignActivity designActivity;
-    FloatingActionButton fab;
     ColorPickerSeekBar colorPickerSeekBar;
     boolean isTrack;
     @Nullable
@@ -45,8 +44,6 @@ public class TextFragment extends Fragment implements TextClickListener {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getLayoutInflater().inflate(R.layout.text_fragment,container,false);
         designActivity = (DesignActivity)getActivity();
-        text = view.findViewById(R.id.text);
-        fab = view.findViewById(R.id.fab);
         recyclerView=view.findViewById(R.id.recyclerView);
         colorPickerSeekBar = view.findViewById(R.id.colorpicker);
         recyclerView.hasFixedSize();
@@ -55,17 +52,6 @@ public class TextFragment extends Fragment implements TextClickListener {
                         LinearLayoutManager.HORIZONTAL,
                         false));
 
-        fab.setOnClickListener(v -> {
-            if (!text.getText().toString().trim().matches("")){
-                designActivity.maskViewText.setVisibility(View.VISIBLE);
-                designActivity.maskViewText.setRotation(0);
-                designActivity.maskViewText.setScaleY(1);
-                designActivity.textView.setText(text.getText().toString());
-                InputMethodManager imm = (InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
-
-        });
 
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override

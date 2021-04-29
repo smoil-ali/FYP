@@ -1,51 +1,94 @@
 package com.reactive.fyp.Activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.reactive.fyp.Dialog.BasicFragment;
+import com.reactive.fyp.Dialog.InputText;
 import com.reactive.fyp.Fragments.ShirtsFragment;
 import com.reactive.fyp.Fragments.StickerFragment;
 import com.reactive.fyp.Fragments.TextFragment;
+import com.reactive.fyp.Interfaces.ImageListener;
+import com.reactive.fyp.Interfaces.InputTextListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.Utils.Constants;
+import com.reactive.fyp.View.ImageMaskView;
 import com.reactive.fyp.View.MaskView;
 import com.reactive.fyp.View.MaskViewText;
+import com.reactive.fyp.model.ImageClass;
 
-public class DesignActivity extends AppCompatActivity implements View.OnClickListener  {
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
+public class DesignActivity extends AppCompatActivity implements View.OnClickListener, ImageListener, InputTextListener {
 
     private static final String TAG = DesignActivity.class.getSimpleName();
-    public ImageView home_shirt,home_sticker;
+    public ImageView home_shirt,home_sticker,home_image,back;
     public ConstraintLayout header;
-    RelativeLayout shirt,sticker,text;
+    RelativeLayout shirt,sticker,text,image,save;
     public MaskView maskView;
     public MaskViewText maskViewText;
+    public ImageMaskView imageMaskView;
     public boolean isFlipped=false;
     public boolean isRotation=false;
     public boolean isZoom=false;
-    public TextView textView;
+    public TextView textView,gallery;
     float x = 0,y=0;
     float d = 0f;
     float newRot = 0f;
     float oldDist = 1f;
     private PointF mid = new PointF();
+
+    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+    StorageReference storageReference = firebaseStorage.getReference();
+    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    DatabaseReference databaseReference = firebaseDatabase.getReference(Constants.USER_IMAGES);
+    private Uri filePath;
+    private String downloadUrl;
+
+    ProgressDialog progressDialog;
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +96,14 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_design);
         maskView=findViewById(R.id.home_container);
         maskViewText=findViewById(R.id.text_mask_container);
+        imageMaskView = findViewById(R.id.image_mask_container);
+        gallery = findViewById(R.id.gallery);
+        back= findViewById(R.id.back);
+        save = findViewById(R.id.save_wrapper);
+        progressDialog = new ProgressDialog(this);
         textView = findViewById(R.id.home_text);
+        image = findViewById(R.id.image_wrapper);
+        home_image = findViewById(R.id.home_image);
         home_shirt=findViewById(R.id.home_shirt);
         home_sticker=findViewById(R.id.home_sticker);
         header=findViewById(R.id.header);
@@ -63,7 +113,10 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         shirt.setOnClickListener(this);
         sticker.setOnClickListener(this);
         text.setOnClickListener(this);
+        image.setOnClickListener(this);
         header.setOnClickListener(this);
+        save.setOnClickListener(this);
+        back.setOnClickListener(this);
         if (savedInstanceState==null){
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.shirtContainer, new ShirtsFragment())
@@ -71,6 +124,83 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         }
 
         Log.i(TAG,maskViewText.getChildCount()+" Children count");
+
+        gallery.setOnClickListener(v -> {
+            startActivity(new Intent(DesignActivity.this,ProfileActivity.class));
+        });
+
+        imageMaskView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        x=event.getX();
+                        y=event.getY();
+                        Log.i(TAG,"mastviewText clicks");
+                        if (x>0 && x<100 && y>0 && y<100){
+                            Log.i(TAG,"cancel clicks");
+                            imageMaskView.cancelView();
+                        }else if (x>0 && x<100 && y<imageMaskView.BOTTOM && y>imageMaskView.BOTTOM-100){
+                            isRotation=true;
+                            d = rotation(event);
+                            Log.i(TAG,"reload clicks");
+                        }else if (x<imageMaskView.RIGHT && x>imageMaskView.RIGHT-100 && y<imageMaskView.BOTTOM && y>imageMaskView.BOTTOM-100){
+                            oldDist = spacing(event);
+                            if (oldDist > 10f) {
+                                isZoom=true;
+                                midPoint(mid, event);
+                            }
+                            Log.i(TAG,"zoom in out clicks");
+                        }
+                        x=v.getX() - event.getRawX();
+                        y=v.getY() - event.getRawY();
+                        if (!imageMaskView.touched){
+                            Log.i(TAG,imageMaskView.touched+" masktext if");
+                            imageMaskView.touched=true;
+                            imageMaskView.invalidate();
+                        }else {
+                            Log.i(TAG,imageMaskView.touched+" masktext");
+                        }
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        if (isRotation){
+                            isRotation=false;
+                        }
+                        if (isZoom){
+                            isZoom=false;
+                        }
+                        Log.i(TAG,"Action up");
+                        break;
+                    case MotionEvent.ACTION_POINTER_UP:
+                        Log.i(TAG,"Action pointer up");
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        if (isRotation){
+                            newRot = rotation(event);
+                            Log.i(TAG,"newRot "+newRot+"v.getRotation() "+v.getRotation()+" (newRot-d) "+(newRot-d));
+                            v.setRotation((float) (v.getRotation() + (newRot - d)));
+                        }else if (isZoom){
+                            float newDist1 = spacing(event);
+                            if (newDist1 > 10f) {
+                                float scale = newDist1 / oldDist * v.getScaleX();
+                                Log.i(TAG,"textview "+scale);
+                                v.setScaleX(scale);
+                                v.setScaleY(scale);
+                                Log.i(TAG,"v.getScaleX() "+v.getScaleX()+"v.getScaleY() "+v.getScaleY());
+                            }
+                        }else {
+                            v.animate().x(event.getRawX()+x)
+                                    .y(event.getRawY()+y)
+                                    .setDuration(0)
+                                    .start();
+                        }
+
+                        break;
+
+                }
+                return true;
+            }
+        });
 
         maskViewText.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -248,10 +378,21 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.textwrapper:
                 openWindow(new TextFragment());
+                showInputTextDialog();
+                break;
+            case R.id.image_wrapper:
+                showAlertDialog();
+                break;
+            case R.id.save_wrapper:
+                getBitMapFromView(header);
+                break;
+            case R.id.back:
+                onBackPressed();
                 break;
             case R.id.header:
                 maskView.clear();
                 maskViewText.clear();
+                imageMaskView.clear();
                 break;
         }
     }
@@ -283,5 +424,132 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         point.set(x / 2, y / 2);
     }
 
+    private void showAlertDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        BasicFragment alertDialog = BasicFragment.newInstance();
+        alertDialog.setListener(this);
+        alertDialog.show(fm, "fragment_alert");
+    }
 
+    private void showInputTextDialog() {
+        FragmentManager fm = getSupportFragmentManager();
+        InputText alertDialog = new InputText();
+        alertDialog.setListener(this);
+        alertDialog.show(fm, "fragment_inputText");
+    }
+
+    @Override
+    public void ImageSelect(Uri uri) {
+        imageMaskView.setVisibility(View.VISIBLE);
+        home_image.setImageURI(uri);
+    }
+
+    public void getBitMapFromView(View view){
+
+        //Define a bitmap with the same size as the view
+        Bitmap returnedBitmap = Bitmap.createBitmap(header.getWidth(), header.getHeight(),Bitmap.Config.ARGB_8888);
+        //Bind a canvas to it
+
+
+        Canvas canvas = new Canvas(returnedBitmap);
+        //Get the view's background
+        Drawable bgDrawable =view.getBackground();
+        if (bgDrawable!=null)
+            //has background drawable, then draw it on the canvas
+            bgDrawable.draw(canvas);
+        else
+            //does not have background drawable, then draw white background on the canvas
+            canvas.drawColor(Color.WHITE);
+        // draw the view on the canvas
+        view.draw(canvas);
+        //return the bitmap
+
+        FileOutputStream outputStream=null;
+        File dir=new File(getExternalFilesDir(null).getAbsolutePath()
+                + "/Art&Design/");
+        Log.i(TAG,dir.toString());
+        dir.mkdirs();
+
+        SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-dd-HH-mm-ss");
+
+        String filename=format.format(new Date())+"Art&Design.jpeg";
+        File Outfile=new File(dir,filename);
+        try{
+            outputStream=new FileOutputStream(Outfile);
+            returnedBitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+            outputStream.flush();
+            outputStream.close();
+            filePath = Uri.fromFile(new File(Outfile.getAbsolutePath()));
+            Log.i(TAG,Outfile.getAbsolutePath());
+            uploadImage();
+        }catch (Exception e){
+            e.printStackTrace();
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+    @Override
+    public void onInputText(String text) {
+        if (!text.trim().matches("")){
+            maskViewText.setVisibility(View.VISIBLE);
+            maskViewText.setRotation(0);
+            maskViewText.setScaleY(1);
+            textView.setText(text);
+        }
+    }
+
+    void uploadImage(){
+        if(filePath != null)
+        {
+            progressDialog.setTitle("Uploading...");
+            progressDialog.setMessage("Image is saving...");
+            progressDialog.show();
+
+            StorageReference ref = storageReference.child("images/"+ UUID.randomUUID().toString());
+            ref.putFile(filePath)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uriTask.isComplete());
+                            downloadUrl = uriTask.getResult().toString();
+                            addImage();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            progressDialog.dismiss();
+                            Log.i(TAG,e.getMessage());
+                            Toast.makeText(DesignActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+
+    }
+
+    void addImage(){
+        ImageClass imageClass = new ImageClass();
+        imageClass.setImage(downloadUrl);
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .push()
+                .setValue(imageClass)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressDialog.dismiss();
+                        Toast.makeText(DesignActivity.this, "Saved", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Log.i(TAG,e.getMessage());
+                    }
+                });
+
+    }
 }

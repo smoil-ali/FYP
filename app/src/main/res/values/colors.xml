@@ -154,4 +154,13 @@
     <color name="txtColor">#ff69e000</color>
     <color name="white">#ffffffff</color>
     <color name="yellow">#ffffb400</color>
+
+
+    <color name="windowBackground">#1C1C1C</color>
+    <color name="colorButtonNormal">#FFFFFB</color>
+    <color name="textColorPrimary">#FFFFFB</color>
+    <color name="textColorPrimaryInverse">#1C1C1C</color>
+    <color name="overlay">#AA1C1C1C</color>
+    <color name="divider">#333333</color>
+    <color name="Grey">#C8C5C5</color>
 </resources>

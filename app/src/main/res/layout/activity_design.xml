@@ -7,23 +7,73 @@
     android:background="@color/colorback"
     tools:context=".Activities.DesignActivity">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/purple_500"
+        android:id="@+id/action_bar"
+        android:paddingHorizontal="8dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Paint Shirt"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="10dp"
+            />
+
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/arrow"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/back"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gallery"
+            android:textStyle="normal"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/gallery"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/background"
-        android:paddingTop="15dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/action_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         >
         <ImageView
             android:id="@+id/home_shirt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
             android:src="@drawable/tshirt_v_template"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleType="fitXY"
+            />
 
         <com.reactive.fyp.View.MaskView
             android:id="@+id/home_container"
@@ -34,6 +84,7 @@
             app:layout_constraintRight_toRightOf="@id/home_shirt"
             app:layout_constraintTop_toTopOf="@id/home_shirt"
             app:layout_constraintBottom_toBottomOf="@id/home_shirt"
+            android:visibility="gone"
             >
             <ImageView
                 android:id="@+id/home_sticker"
@@ -51,6 +102,7 @@
             app:layout_constraintTop_toTopOf="@id/home_shirt"
             android:padding="40dp"
             app:layout_constraintBottom_toBottomOf="@id/home_shirt"
+            android:visibility="gone"
             >
             <TextView
                 android:id="@+id/home_text"
@@ -60,12 +112,31 @@
                 android:textSize="40sp"
                 />
         </com.reactive.fyp.View.MaskViewText>
+
+
+        <com.reactive.fyp.View.ImageMaskView
+            android:id="@+id/image_mask_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/home_shirt"
+            app:layout_constraintRight_toRightOf="@id/home_shirt"
+            app:layout_constraintTop_toTopOf="@id/home_shirt"
+            android:padding="40dp"
+            app:layout_constraintBottom_toBottomOf="@id/home_shirt"
+            android:visibility="gone"
+            >
+            <ImageView
+                android:id="@+id/home_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                />
+        </com.reactive.fyp.View.ImageMaskView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintBottom_toTopOf="@id/footer"
         android:id="@+id/body"
@@ -73,9 +144,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_height="match_parent"
             android:id="@+id/shirtContainer"
             />
 
@@ -218,6 +287,7 @@
                 >
 
                 <RelativeLayout
+                    android:id="@+id/image_wrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -254,6 +324,7 @@
                 >
 
                 <RelativeLayout
+                    android:id="@+id/save_wrapper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

@@ -44,7 +44,7 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
     DesignActivity designActivity;
     int currentColor;
     ImageView paint ;
-    Button front,back;
+    Button front,back,roundShirt,vShirt,fullsleeve,halfsleeve;
     ColorPickerSeekBar colorPickerSeekBar;
     boolean isTrack;
     @Nullable
@@ -57,6 +57,10 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
         paint = view.findViewById(R.id.paint);
         front = view.findViewById(R.id.front);
         back = view.findViewById(R.id.back);
+        roundShirt = view.findViewById(R.id.roundshirt);
+        vShirt = view.findViewById(R.id.vshirt);
+        fullsleeve = view.findViewById(R.id.fullsleeve);
+        halfsleeve = view.findViewById(R.id.halfsleeve);
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override
             public void onColorChanged(SeekBar seekBar, int color, boolean fromUser) {
@@ -69,6 +73,7 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 Log.i(TAG,"start tracking");
+
                 isTrack = true;
             }
 
@@ -104,6 +109,29 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
             }
         });
 
+        roundShirt.setOnClickListener(v -> {
+            designActivity.home_shirt
+                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
+                            R.drawable.tshirt_template));
+        });
+
+        vShirt.setOnClickListener(v -> {
+            designActivity.home_shirt
+                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
+                            R.drawable.tshirt_v_template));
+        });
+
+        fullsleeve.setOnClickListener(v -> {
+            designActivity.home_shirt
+                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
+                            R.drawable.fsleeve));
+        });
+
+        halfsleeve.setOnClickListener(v -> {
+            designActivity.home_shirt
+                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
+                            R.drawable.tshirt_template));
+        });
 
 
         return view;

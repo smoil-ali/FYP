@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.reactive.fyp.Interfaces.StickerListener;
@@ -56,7 +57,7 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        RelativeLayout relativeLayout;
+        ConstraintLayout relativeLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView=itemView.findViewById(R.id.shirtIcon);

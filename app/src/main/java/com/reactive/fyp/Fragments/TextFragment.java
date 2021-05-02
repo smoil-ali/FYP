@@ -1,7 +1,9 @@
 package com.reactive.fyp.Fragments;
 
 import android.content.Context;
+import android.content.res.ObbInfo;
 import android.graphics.PorterDuff;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,35 +11,49 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.reactive.fyp.Activities.DesignActivity;
 import com.reactive.fyp.Adapter.TextAdapter;
+import com.reactive.fyp.Dialog.InputText;
+import com.reactive.fyp.Interfaces.InputTextListener;
 import com.reactive.fyp.Interfaces.TextClickListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.Utils.Constants;
+import com.reactive.fyp.model.FontModel;
+import com.reactive.fyp.model.fontClass;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class
-TextFragment extends Fragment implements TextClickListener {
+TextFragment extends Fragment implements TextClickListener , InputTextListener {
 
     final String TAG = TextFragment.class.getSimpleName();
     RecyclerView recyclerView;
     TextAdapter adapter;
     List<String> list = new ArrayList<>();
-    List<Integer> fontList = new ArrayList<Integer>();
+    List<FontModel> fontList = new ArrayList<>();
     DesignActivity designActivity;
     ColorPickerSeekBar colorPickerSeekBar;
+    ProgressBar progressBar;
     boolean isTrack;
     @Nullable
     @Override
@@ -46,6 +62,7 @@ TextFragment extends Fragment implements TextClickListener {
         designActivity = (DesignActivity)getActivity();
         recyclerView=view.findViewById(R.id.recyclerView);
         colorPickerSeekBar = view.findViewById(R.id.colorpicker);
+        progressBar = view.findViewById(R.id.progress);
         recyclerView.hasFixedSize();
         recyclerView.
                 setLayoutManager(new LinearLayoutManager(requireContext(),
@@ -53,6 +70,9 @@ TextFragment extends Fragment implements TextClickListener {
                         false));
 
 
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        showInputTextDialog();
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override
             public void onColorChanged(SeekBar seekBar, int color, boolean fromUser) {
@@ -84,41 +104,33 @@ TextFragment extends Fragment implements TextClickListener {
         super.onViewCreated(view, savedInstanceState);
         loadData();
         loadFonts();
-        adapter =new TextAdapter(getContext(),list,fontList);
-        recyclerView.setAdapter(adapter);
-        adapter.setListener(this);
 
     }
 
     void loadFonts(){
-        fontList.add(R.font.ffont1);
-        fontList.add(R.font.ffont2);
-        fontList.add(R.font.ffont3);
-        fontList.add(R.font.ffont4);
-        fontList.add(R.font.ffont5);
-        fontList.add(R.font.ffont6);
-        fontList.add(R.font.ffont7);
-        fontList.add(R.font.ffont8);
-        fontList.add(R.font.ffont9);
-        fontList.add(R.font.ffont10);
-        fontList.add(R.font.ffont11);
-        fontList.add(R.font.ffont12);
-        fontList.add(R.font.ffont13);
-        fontList.add(R.font.ffont14);
-        fontList.add(R.font.ffont15);
-        fontList.add(R.font.ffont16);
-        fontList.add(R.font.ffont17);
-        fontList.add(R.font.ffont18);
-        fontList.add(R.font.ffont19);
-        fontList.add(R.font.ffont20);
-        fontList.add(R.font.ffont21);
-        fontList.add(R.font.ffont22);
-        fontList.add(R.font.ffont23);
-        fontList.add(R.font.ffont24);
-        fontList.add(R.font.ffont25);
-        fontList.add(R.font.ffont26);
-        fontList.add(R.font.ffont27);
-        fontList.add(R.font.ffont28);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(Constants.FONTS);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                fontList.clear();
+                for (DataSnapshot snapshot1:snapshot.getChildren()){
+                    FontModel fontClass = snapshot1.getValue(FontModel.class);
+                    fontList.add(fontClass);
+                }
+                Constants.defaultFace= Typeface.createFromAsset(getActivity().getAssets(), "font/"+fontList.get(0).getFontName());
+                progressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                setup();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(designActivity, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG,error.getMessage());
+            }
+        });
     }
 
     void loadData(){
@@ -154,6 +166,34 @@ TextFragment extends Fragment implements TextClickListener {
 
     @Override
     public void onTextClick(int pos) {
-        designActivity.textView.setTypeface(ResourcesCompat.getFont(getContext(),fontList.get(pos)));
+        Constants.defaultFace = Typeface.createFromAsset(getActivity().getAssets(), "font/"+fontList.get(pos).getFontName());
+        Constants.FontPrice = Integer.parseInt(fontList.get(pos).getPrice());
+        designActivity.textView.setTypeface(Constants.defaultFace);
+    }
+
+    void setup(){
+        adapter =new TextAdapter(getContext(),list,fontList);
+        recyclerView.setAdapter(adapter);
+        adapter.setListener(this);
+    }
+
+    private void showInputTextDialog() {
+        FragmentManager fm = getFragmentManager();
+        InputText alertDialog = new InputText();
+        alertDialog.setListener(this);
+        alertDialog.show(fm, "fragment_inputText");
+    }
+
+    @Override
+    public void onInputText(String text) {
+        if (!text.trim().matches("")){
+            designActivity.maskViewText.setVisibility(View.VISIBLE);
+            designActivity.maskViewText.setRotation(0);
+            designActivity.maskViewText.setScaleY(1);
+            designActivity.textView.setText(text);
+            designActivity.textView.setTypeface(Constants.defaultFace);
+            Constants.FontPrice = Integer.parseInt(fontList.get(0).getPrice());
+
+        }
     }
 }

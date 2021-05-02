@@ -9,9 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.reactive.fyp.Activities.ImageViewActivity;
 import com.reactive.fyp.R;
 import com.reactive.fyp.Utils.Constants;
@@ -39,7 +42,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        YoYo.with(Techniques.FadeInDown).playOn(holder.container);
         Glide.with(context)
                 .load(list.get(position).getImage())
                 .placeholder(R.drawable.photo_library)
@@ -47,7 +50,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         holder.imageView.setOnClickListener(v ->{
             Intent intent = new Intent(context, ImageViewActivity.class);
-            intent.putExtra(Constants.PARAMS,list.get(position).getImage());
+            intent.putExtra(Constants.PARAMS,list.get(position));
             context.startActivity(intent);
         });
     }
@@ -59,9 +62,11 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        ConstraintLayout container;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView=itemView.findViewById(R.id.image);
+            container = itemView.findViewById(R.id.container);
         }
     }
 }

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:shimmer_duration="1200"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="@dimen/_10sdp"
+            >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_200sdp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:id="@+id/one"
+                    android:padding="@dimen/_4sdp"
+                    >
+                    <View
+                        android:id="@+id/image"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:background="@drawable/photo_placeholder"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        />
+                    <View
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="16dp"
+                        app:layout_constraintTop_toTopOf="@id/image"
+                        app:layout_constraintBottom_toBottomOf="@id/image"
+                        app:layout_constraintStart_toEndOf="@id/image"
+                        android:background="@drawable/placeholder_slider"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/image"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:background="@drawable/placeholder_slider"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_200sdp"
+                    android:id="@+id/two"
+                    android:padding="@dimen/_4sdp"
+                    app:layout_constraintTop_toBottomOf="@id/one"
+                    >
+                    <View
+                        android:id="@+id/image1"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:background="@drawable/photo_placeholder"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        />
+                    <View
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="16dp"
+                        app:layout_constraintTop_toTopOf="@id/image1"
+                        app:layout_constraintBottom_toBottomOf="@id/image1"
+                        app:layout_constraintStart_toEndOf="@id/image1"
+                        android:background="@drawable/placeholder_slider"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/image1"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:background="@drawable/placeholder_slider"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_200sdp"
+                    android:id="@+id/three"
+                    android:padding="@dimen/_4sdp"
+                    app:layout_constraintTop_toBottomOf="@id/two"
+                    >
+                    <View
+                        android:id="@+id/image2"
+                        android:layout_width="@dimen/_60sdp"
+                        android:layout_height="@dimen/_60sdp"
+                        android:background="@drawable/photo_placeholder"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="@dimen/_10sdp"
+                        />
+                    <View
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="16dp"
+                        app:layout_constraintTop_toTopOf="@id/image2"
+                        app:layout_constraintBottom_toBottomOf="@id/image2"
+                        app:layout_constraintStart_toEndOf="@id/image2"
+                        android:background="@drawable/placeholder_slider"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/image2"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:background="@drawable/placeholder_slider"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

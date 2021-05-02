@@ -14,19 +14,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FYP"
         tools:replace="android:icon">
-        <activity android:name=".Activities.ProfileActivity"></activity>
-        <activity android:name=".Activities.testActivity"></activity>
+        <activity android:name=".Activities.EditprofileActivity"></activity>
+        <activity android:name=".Activities.CheckOutActivity" />
+        <activity android:name=".Activities.HomeActivity">
+
+        </activity>
+        <activity android:name=".Activities.ProfileActivity" />
+        <activity android:name=".Activities.testActivity" />
         <activity android:name=".Activities.DesignActivity" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".Activities.SignInActivitye">
+        <activity android:name=".MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activities.SignInActivitye" />
         <activity android:name=".Activities.RegisterActivity" />
-        <activity android:name=".Activities.ImageViewActivity"/>
+        <activity android:name=".Activities.ImageViewActivity" />
     </application>
 
 </manifest>

@@ -62,7 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class DesignActivity extends AppCompatActivity implements View.OnClickListener, ImageListener, InputTextListener {
+public class DesignActivity extends AppCompatActivity implements View.OnClickListener,ImageListener{
 
     private static final String TAG = DesignActivity.class.getSimpleName();
     public ImageView home_shirt,home_sticker,home_image,back;
@@ -97,7 +97,6 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         maskView=findViewById(R.id.home_container);
         maskViewText=findViewById(R.id.text_mask_container);
         imageMaskView = findViewById(R.id.image_mask_container);
-        gallery = findViewById(R.id.gallery);
         back= findViewById(R.id.back);
         save = findViewById(R.id.save_wrapper);
         progressDialog = new ProgressDialog(this);
@@ -125,9 +124,11 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
 
         Log.i(TAG,maskViewText.getChildCount()+" Children count");
 
-        gallery.setOnClickListener(v -> {
-            startActivity(new Intent(DesignActivity.this,ProfileActivity.class));
+
+        back.setOnClickListener(v -> {
+            onBackPressed();
         });
+
 
         imageMaskView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -378,7 +379,6 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.textwrapper:
                 openWindow(new TextFragment());
-                showInputTextDialog();
                 break;
             case R.id.image_wrapper:
                 showAlertDialog();
@@ -431,12 +431,7 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         alertDialog.show(fm, "fragment_alert");
     }
 
-    private void showInputTextDialog() {
-        FragmentManager fm = getSupportFragmentManager();
-        InputText alertDialog = new InputText();
-        alertDialog.setListener(this);
-        alertDialog.show(fm, "fragment_inputText");
-    }
+
 
     @Override
     public void ImageSelect(Uri uri) {
@@ -490,15 +485,6 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    @Override
-    public void onInputText(String text) {
-        if (!text.trim().matches("")){
-            maskViewText.setVisibility(View.VISIBLE);
-            maskViewText.setRotation(0);
-            maskViewText.setScaleY(1);
-            textView.setText(text);
-        }
-    }
 
     void uploadImage(){
         if(filePath != null)
@@ -531,8 +517,18 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void addImage(){
+        String description;
         ImageClass imageClass = new ImageClass();
         imageClass.setImage(downloadUrl);
+        int total = Constants.FontPrice+Constants.stickerPrice+Constants.ImagePrice;
+        imageClass.setPrice(total+"");
+        imageClass.setActualPrice(total+"");
+        if (!Constants.DIRECTION_MSG.equals("Back")){
+            description = Constants.DIRECTION_MSG +"."+Constants.TYPE_MSG+"."+Constants.SLEEVE_MSG;
+        }else {
+            description = Constants.DIRECTION_MSG;
+        }
+        imageClass.setDescription(description);
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .push()
                 .setValue(imageClass)

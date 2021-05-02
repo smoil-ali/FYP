@@ -25,6 +25,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 
 import com.reactive.fyp.R;
+import com.reactive.fyp.Utils.Constants;
 
 import java.security.PublicKey;
 
@@ -130,6 +131,7 @@ public class MaskView extends FrameLayout {
         return bm;
     }
     public void cancelView(){
+        Constants.stickerPrice = 0;
         setVisibility(GONE);
     }
 

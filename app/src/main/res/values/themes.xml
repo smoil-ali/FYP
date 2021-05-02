@@ -27,4 +27,5 @@
         <item name="android:textSize">@dimen/text_size_m</item>
         <item name="android:gravity">center_horizontal|center_vertical</item>
     </style>
+
 </resources>

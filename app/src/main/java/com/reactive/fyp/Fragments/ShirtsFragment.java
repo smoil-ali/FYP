@@ -28,6 +28,7 @@ import com.reactive.fyp.Activities.DesignActivity;
 import com.reactive.fyp.Adapter.ShirtAdapter;
 import com.reactive.fyp.Interfaces.ShirtListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.Utils.Constants;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
@@ -94,6 +95,7 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
         front.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Constants.DIRECTION_MSG = "Front";
                 designActivity.home_shirt
                         .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
                         R.drawable.tshirt_v_template));
@@ -103,6 +105,7 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Constants.DIRECTION_MSG = "Back";
                 designActivity.home_shirt
                         .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
                         R.drawable.tshirt_kids_template));
@@ -110,24 +113,28 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
         });
 
         roundShirt.setOnClickListener(v -> {
+            Constants.TYPE_MSG = "Round";
             designActivity.home_shirt
                     .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
                             R.drawable.tshirt_template));
         });
 
         vShirt.setOnClickListener(v -> {
+            Constants.TYPE_MSG = "V";
             designActivity.home_shirt
                     .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
                             R.drawable.tshirt_v_template));
         });
 
         fullsleeve.setOnClickListener(v -> {
+            Constants.SLEEVE_MSG = "Full Sleeve";
             designActivity.home_shirt
                     .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
                             R.drawable.fsleeve));
         });
 
         halfsleeve.setOnClickListener(v -> {
+            Constants.SLEEVE_MSG = "Half Sleeve";
             designActivity.home_shirt
                     .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
                             R.drawable.tshirt_template));

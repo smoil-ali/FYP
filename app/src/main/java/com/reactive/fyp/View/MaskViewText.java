@@ -21,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.reactive.fyp.R;
+import com.reactive.fyp.Utils.Constants;
 
 public class MaskViewText extends FrameLayout {
     final String TAG = MaskViewText.class.getSimpleName();
@@ -120,6 +121,7 @@ public class MaskViewText extends FrameLayout {
         return bm;
     }
     public void cancelView(){
+        Constants.FontPrice = 0;
         setVisibility(GONE);
     }
 

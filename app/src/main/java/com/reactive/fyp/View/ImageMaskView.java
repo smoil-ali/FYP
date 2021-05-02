@@ -20,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.reactive.fyp.R;
+import com.reactive.fyp.Utils.Constants;
 
 public class ImageMaskView extends FrameLayout {
     final String TAG = ImageMaskView.class.getSimpleName();
@@ -118,6 +119,7 @@ public class ImageMaskView extends FrameLayout {
         return bm;
     }
     public void cancelView(){
+        Constants.ImagePrice = 0;
         setVisibility(GONE);
     }
 

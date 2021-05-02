@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.ImageViewActivity"
-    android:background="@color/black"
+    android:background="@color/cardview_shadow_start_color"
     >
 
 
@@ -14,7 +15,6 @@
         android:layout_height="@dimen/_50sdp"
         app:layout_constraintTop_toTopOf="parent"
         android:paddingHorizontal="@dimen/_8sdp"
-        android:background="@color/black"
         android:elevation="@dimen/_5sdp"
         >
         <TextView
@@ -23,22 +23,24 @@
             android:textSize="@dimen/_16sdp"
             android:textColor="@color/white"
             android:textStyle="normal"
-            android:text="ImageView"
+            android:text="Delete"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/delete"
             />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add To Cart"
+            android:text="Price"
             android:textStyle="normal"
             android:textColor="@color/white"
             android:textSize="@dimen/_16sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/price"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -48,9 +50,27 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cart"
         android:id="@+id/imageView"
         android:scaleType="fitXY"
+
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/share"
+        app:layout_constraintBottom_toTopOf="@id/cart"
+        android:text="Share"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add To Cart"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/cart"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

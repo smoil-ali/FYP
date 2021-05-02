@@ -7,27 +7,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.reactive.fyp.Interfaces.StickerListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.model.StickerModel;
 
 import java.util.List;
 
 public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.ViewHolder> {
 
     Context context;
-    List<Bitmap> list;
+    List<StickerModel> list;
     StickerListener listener;
 
     public void setListener(StickerListener listener) {
         this.listener = listener;
     }
 
-    public StickerAdapter(Context context, List<Bitmap> list) {
+    public StickerAdapter(Context context, List<StickerModel> list) {
         this.context = context;
         this.list = list;
     }
@@ -41,7 +44,9 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageView.setImageBitmap(list.get(position));
+        StickerModel model = list.get(position);
+        holder.price.setText(model.getPrice());
+        Glide.with(context).load(model.getImageUrl()).into(holder.imageView);
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,11 +62,13 @@ public class StickerAdapter extends RecyclerView.Adapter<StickerAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
+        TextView price;
         ConstraintLayout relativeLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView=itemView.findViewById(R.id.shirtIcon);
             relativeLayout=itemView.findViewById(R.id.img_conationer);
+            price = itemView.findViewById(R.id.price);
         }
     }
 }

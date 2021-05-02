@@ -1,6 +1,7 @@
 package com.reactive.fyp.Adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.reactive.fyp.Interfaces.TextClickListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.model.FontModel;
 
 import java.nio.channels.ReadableByteChannel;
 import java.util.List;
@@ -23,10 +25,10 @@ import java.util.List;
 public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
     Context context;
     List<String> list;
-    List<Integer> fontlist;
+    List<FontModel> fontlist;
     TextClickListener listener;
 
-    public TextAdapter(Context context, List<String> list,List<Integer> fontlist) {
+    public TextAdapter(Context context, List<String> list,List<FontModel> fontlist) {
         this.context = context;
         this.list = list;
         this.fontlist = fontlist;
@@ -46,7 +48,9 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.textView.setText(list.get(position));
-        holder.textView.setTypeface(ResourcesCompat.getFont(context,fontlist.get(position)));
+        Typeface face= Typeface.createFromAsset(context.getAssets(), "font/"+fontlist.get(position).getFontName());
+        holder.textView.setTypeface(face);
+        holder.price.setText(fontlist.get(position).getPrice());
         holder.relativeLayout.setOnClickListener(v -> {
             listener.onTextClick(position);
         });
@@ -58,11 +62,12 @@ public class TextAdapter extends RecyclerView.Adapter<TextAdapter.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        TextView textView;
+        TextView textView,price;
         ConstraintLayout relativeLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.text);
+            price = itemView.findViewById(R.id.price);
             relativeLayout = itemView.findViewById(R.id.txt_conationer);
         }
     }

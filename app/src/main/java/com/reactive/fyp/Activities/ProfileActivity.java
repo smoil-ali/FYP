@@ -54,7 +54,7 @@ public class ProfileActivity extends AppCompatActivity {
     void getProfile(){
         databaseReference = firebaseDatabase.getReference(Constants.USERS);
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         model = snapshot.getValue(ProfileModel.class);

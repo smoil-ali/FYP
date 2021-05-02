@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.reactive.fyp.Interfaces.InputTextListener;
@@ -36,6 +37,7 @@ public class InputText extends DialogFragment {
         input_text = view.findViewById(R.id.input_text);
         button = view.findViewById(R.id.done);
 
+        input_text.setHintTextColor(ContextCompat.getColor(getContext(),R.color.white));
         button.setOnClickListener(v -> {
             dismiss();
             listener.onInputText(input_text.getText().toString());

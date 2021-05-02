@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.reactive.fyp.model.ImageClass;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -46,54 +49,54 @@ public class Helper {
                 .getSharedPreferences(USER,0);
         return sharedPreferences.getString(USER_INFO,"");
     }
-//
-//    public static String fromKitchenToString(Kitchen model){
-//        if (model == null) {
-//            return null;
-//        }
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<Kitchen>() {
-//        }.getType();
-//        String json = gson.toJson(model, type);
-//        return json;
-//    }
-//
-//    public static Kitchen fromStringToKitchen(String model){
-//        if (model == null) {
-//            return null;
-//        }
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<Kitchen>() {
-//        }.getType();
-//        Kitchen kitchen = gson.fromJson(model, type);
-//        return kitchen;
-//    }
-//
-//    public static String fromListToString(List<Menu> menus){
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<ArrayList<Menu>>(){}.getType();
-//        String json = gson.toJson(menus,type);
-//        return json;
-//    }
-//
-//    public static List<Menu> fromStringToList(String list){
-//        Gson gson = new Gson();
-//        Type type = new TypeToken<ArrayList<Menu>>(){}.getType();
-//        List<Menu> menuList = gson.fromJson(list,type);
-//        return menuList;
-//    }
-//
-//    public static void setCartData(String list,Context context){
-//        SharedPreferences sharedPreferences = context
-//                .getSharedPreferences(CART,0);
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.putString(CART_DATA,list);
-//        editor.apply();
-//    }
-//
-//    public static String getCartData(Context context){
-//        SharedPreferences sharedPreferences = context
-//                .getSharedPreferences(CART,0);
-//        return sharedPreferences.getString(CART_DATA,"");
-//    }
+
+    public static String fromImageClassToString(ImageClass model){
+        if (model == null) {
+            return null;
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<ImageClass>() {
+        }.getType();
+        String json = gson.toJson(model, type);
+        return json;
+    }
+
+    public static ImageClass fromStringToImageClass(String model){
+        if (model == null) {
+            return null;
+        }
+        Gson gson = new Gson();
+        Type type = new TypeToken<ImageClass>() {
+        }.getType();
+        ImageClass imageClass = gson.fromJson(model, type);
+        return imageClass;
+    }
+
+    public static String fromListToString(List<ImageClass> imageClasses){
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<ImageClass>>(){}.getType();
+        String json = gson.toJson(imageClasses,type);
+        return json;
+    }
+
+    public static List<ImageClass> fromStringToList(String list){
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<ImageClass>>(){}.getType();
+        List<ImageClass> menuList = gson.fromJson(list,type);
+        return menuList;
+    }
+
+    public static void setCartData(String list,Context context){
+        SharedPreferences sharedPreferences = context
+                .getSharedPreferences(CART,0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(CART_DATA,list);
+        editor.apply();
+    }
+
+    public static String getCartData(Context context){
+        SharedPreferences sharedPreferences = context
+                .getSharedPreferences(CART,0);
+        return sharedPreferences.getString(CART_DATA,"");
+    }
 }

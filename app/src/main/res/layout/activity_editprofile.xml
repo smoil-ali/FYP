@@ -88,11 +88,35 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Email"
+                app:layout_constraintTop_toBottomOf="@id/name_container"
+                android:id="@+id/email_container"
+                android:layout_marginTop="10dp"
+                app:error="@{data.emailError}"
+                app:errorEnabled="@{data.displayError}"
+                app:layout_goneMarginTop="@dimen/_10sdp"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:id="@+id/email"
+                    android:text="@={data.email}"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Update"
-                app:layout_constraintTop_toBottomOf="@id/name_container"
+                app:layout_constraintTop_toBottomOf="@id/email_container"
                 android:layout_marginTop="10dp"
                 android:id="@+id/done"
                 android:visibility="@{visibility ? View.VISIBLE : View.INVISIBLE}"

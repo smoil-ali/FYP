@@ -4,6 +4,10 @@
         <import type="android.view.View"/>
 
         <variable name="visibility" type="boolean"/>
+
+        <variable
+            name="data"
+            type="com.reactive.fyp.model.CartClass" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -52,6 +56,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:padding="@dimen/_5sdp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -89,6 +94,8 @@
                 app:layout_constraintTop_toBottomOf="@id/total"
                 android:id="@+id/address_container"
                 android:layout_marginTop="@dimen/_8sdp"
+                app:error="@{data.addressError}"
+                app:errorEnabled="@{data.displayError}"
                 >
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -96,7 +103,52 @@
                     android:layout_height="match_parent"
                     android:inputType="text"
                     android:id="@+id/address"
+                    android:text="@={data.address}"
                     />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Phone"
+                app:layout_constraintTop_toBottomOf="@id/address_container"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:id="@+id/phone_container"
+                app:error="@{data.phoneError}"
+                app:errorEnabled="@{data.displayError}"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/phone"
+                    android:text="@={data.phone}"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:hint="Postal Code"
+                app:layout_constraintTop_toBottomOf="@id/phone_container"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:id="@+id/postal_code"
+                app:error="@{data.postalError}"
+                app:errorEnabled="@{data.displayError}"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="numberDecimal"
+                    android:id="@+id/postal"
+                    android:text="@={data.postal}"
+                    />
+
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -104,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:text="Proceed"
                 android:id="@+id/done"
-                app:layout_constraintTop_toBottomOf="@id/address_container"
+                app:layout_constraintTop_toBottomOf="@id/postal_code"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="@dimen/_8sdp"

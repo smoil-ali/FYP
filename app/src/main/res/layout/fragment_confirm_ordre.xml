@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cart"
+                android:text="Confirm Orders"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -33,18 +33,6 @@
                 android:textStyle="bold"
                 />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Orders"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_20sdp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/orders"
-                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -56,6 +44,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             >
 
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progress"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:visibility="gone"
+                />
 
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -63,7 +61,7 @@
                 android:layout_height="0dp"
                 android:id="@+id/refresher"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/done"
+                app:layout_constraintBottom_toBottomOf="parent"
                 >
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -85,13 +83,6 @@
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/done"
-                android:text="Buy Now"
-                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

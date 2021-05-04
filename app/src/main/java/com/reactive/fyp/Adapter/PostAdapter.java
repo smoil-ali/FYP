@@ -79,10 +79,11 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference(Constants.USERS);
         databaseReference.child(id)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         ProfileModel model = snapshot.getValue(ProfileModel.class);
+                        model.setId(snapshot.getKey());
                         Log.i(TAG,model.toString());
                         Glide.with(context).load(model.getImage())
                                 .placeholder(R.drawable.user)

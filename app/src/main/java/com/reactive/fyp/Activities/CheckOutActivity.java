@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
+import android.nfc.cardemulation.OffHostApduService;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -42,23 +43,37 @@ public class CheckOutActivity extends AppCompatActivity {
             cartClass = (CartClass)getIntent().getExtras().getSerializable(Constants.PARAMS);
             Log.i(TAG,cartClass.toString());
         }
+        binding.setData(cartClass);
         simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH-mm-ss");
         binding.done.setOnClickListener(v -> {
-            if (!binding.address.getText().toString().trim().matches("")){
+            if (isValid()){
                 binding.setVisibility(false);
                 cartClass.setAddress(binding.address.getText().toString());
                 cartClass.setTotal(total+"");
                 cartClass.setStatus(false);
                 cartClass.setTimestamp(simpleDateFormat.format(new Date()));
                 addOrder();
-            }else {
-                Toast.makeText(this, "We need address", Toast.LENGTH_SHORT).show();
             }
         });
 
         getTotal();
     }
 
+
+    boolean isValid(){
+        cartClass.setDisplayError(true);
+        if (!cartClass.getAddressError().isEmpty()){
+            return false;
+        }
+        if (!cartClass.getPhoneError().isEmpty()){
+            return false;
+        }
+        if (!cartClass.getPostalError().isEmpty()){
+            return false;
+        }
+        cartClass.setDisplayError(false);
+        return true;
+    }
 
     void getTotal(){
         for (ImageClass imageClass:cartClass.getList()){

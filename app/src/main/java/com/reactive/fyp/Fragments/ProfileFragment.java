@@ -1,15 +1,18 @@
 package com.reactive.fyp.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -68,15 +71,31 @@ public class ProfileFragment extends Fragment {
             openScreen();
         });
 
-        binding.editProfile.setOnClickListener( v -> {
-            openEditProfile();
-        });
 
-        binding.logout.setOnClickListener(v -> {
-            FirebaseAuth.getInstance().signOut();
-            Helper.setLogin(getContext(),false);
-            startActivity(new Intent(getContext(), SignInActivitye.class));
-            getActivity().finish();
+        binding.menu.setOnClickListener(v -> {
+
+            PopupMenu popupMenu = new PopupMenu(getContext(), v);
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @SuppressLint("NonConstantResourceId")
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.edit_profile:
+                            openEditProfile();
+                            return true;
+                        case R.id.logout:
+                            FirebaseAuth.getInstance().signOut();
+                            Helper.setLogin(getContext(),false);
+                            startActivity(new Intent(getContext(), SignInActivitye.class));
+                            getActivity().finish();
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+            popupMenu.inflate(R.menu.profile_menu);
+            popupMenu.show();
         });
 
         getProfile();
@@ -88,7 +107,7 @@ public class ProfileFragment extends Fragment {
     void getProfile(){
         databaseReference = firebaseDatabase.getReference(Constants.USERS);
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         model = snapshot.getValue(ProfileModel.class);

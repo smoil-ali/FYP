@@ -96,7 +96,7 @@ public class SignInActivitye extends AppCompatActivity {
 
     void openScreen(){
         Helper.setLogin(this,true);
-        Intent intent = new Intent(this,DesignActivity.class);
+        Intent intent = new Intent(this,HomeActivity.class);
         startActivity(intent);
         finish();
     }

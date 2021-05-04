@@ -60,7 +60,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         binding.done.setOnClickListener(v -> {
             if (isValid()){
-                model.setImage(downloadUrl);
+                if (downloadUrl != null)
+                    model.setImage(downloadUrl);
                 binding.setVisibility(false);
                 register();
             }
@@ -118,10 +119,6 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
         }
         if (!model.getPasswordError().isEmpty()){
-            return false;
-        }
-        if (downloadUrl == null){
-            Toast.makeText(this, "Add Profile Image", Toast.LENGTH_SHORT).show();
             return false;
         }
         model.setDisplayError(false);

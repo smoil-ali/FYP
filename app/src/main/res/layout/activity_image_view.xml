@@ -52,8 +52,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/cart"
         android:id="@+id/imageView"
-        android:scaleType="fitXY"
-
         />
 
     <com.google.android.material.button.MaterialButton

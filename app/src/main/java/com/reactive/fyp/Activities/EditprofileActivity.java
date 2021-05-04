@@ -18,7 +18,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -47,7 +50,7 @@ public class EditprofileActivity extends AppCompatActivity {
     StorageReference storageReference = firebaseStorage.getReference();
     private Uri filePath;
     private String downloadUrl;
-    String currentUser;
+    String tempEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,7 @@ public class EditprofileActivity extends AppCompatActivity {
         if (getIntent().getExtras() != null){
             model = (ProfileModel) getIntent().getExtras().getSerializable(Constants.PARAMS);
         }
+        tempEmail = model.getEmail();
         binding.setData(model);
         binding.setVisibility(true);
         mAuth = FirebaseAuth.getInstance();
@@ -70,8 +74,13 @@ public class EditprofileActivity extends AppCompatActivity {
                 if (downloadUrl != null)
                     model.setImage(downloadUrl);
                 binding.setVisibility(false);
-                updateProfile();
+                if (check()){
+                    updateEmail();
+                }else {
+                    updateProfile();
+                }
             }
+
 
         });
 
@@ -79,6 +88,51 @@ public class EditprofileActivity extends AppCompatActivity {
             chooseImage();
         });
 
+    }
+
+    boolean isValid(){
+        model.setDisplayError(true);
+        if (!model.getEmailError().isEmpty()){
+            return false;
+        }
+        if (!model.getNameError().isEmpty()){
+            return false;
+        }
+        model.setDisplayError(false);
+        return true;
+    }
+
+    boolean check(){
+        return !tempEmail.equals(binding.email.getText().toString());
+    }
+
+    void updateEmail(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(tempEmail,model.getPassword());
+        user.reauthenticate(credential)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.updateEmail(model.getEmail())
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        updateProfile();
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.i(TAG,e.getMessage());
+                        Toast.makeText(EditprofileActivity.this,
+                                "try again",
+                                Toast.LENGTH_SHORT).show();
+                        binding.setVisibility(true);
+                    }
+                });
     }
 
     void updateProfile(){
@@ -101,18 +155,6 @@ public class EditprofileActivity extends AppCompatActivity {
                 });
     }
 
-    boolean isValid(){
-        model.setDisplayError(true);
-        if (!model.getNameError().isEmpty()){
-            return false;
-        }
-        if (downloadUrl == null && model.getImage().isEmpty()){
-            Toast.makeText(this, "Add Profile Image", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        model.setDisplayError(false);
-        return true;
-    }
 
     private void chooseImage() {
         Intent intent = new Intent();

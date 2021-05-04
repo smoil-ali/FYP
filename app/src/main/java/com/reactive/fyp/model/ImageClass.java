@@ -11,7 +11,8 @@ public class ImageClass extends BaseObservable implements Serializable {
     String id;
     String image;
     String actualPrice;
-    String price = "100";
+    String formattedPrice;
+    String price;
     String description;
     String qty;
 
@@ -84,13 +85,28 @@ public class ImageClass extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR.qty);
     }
 
+
+    @Bindable({"price"})
+    public String getFormattedPrice() {
+        return getPrice() + "/-Rs";
+    }
+
+
+    public void setFormattedPrice(String formattedPrice) {
+        this.formattedPrice = formattedPrice;
+        notifyPropertyChanged(BR.formattedPrice);
+    }
+
     @Override
     public String toString() {
         return "ImageClass{" +
                 "id='" + id + '\'' +
                 ", image='" + image + '\'' +
+                ", actualPrice='" + actualPrice + '\'' +
+                ", formattedPrice='" + formattedPrice + '\'' +
                 ", price='" + price + '\'' +
                 ", description='" + description + '\'' +
+                ", qty='" + qty + '\'' +
                 '}';
     }
 }

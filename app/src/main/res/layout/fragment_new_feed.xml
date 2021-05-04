@@ -59,7 +59,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/recycler"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:visibility="@{visibility ? View.VISIBLE : View.INVISIBLE}"
             />
 

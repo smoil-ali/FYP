@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.NumberPicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,7 +32,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public CartAdapter(Context context, List<ImageClass> list) {
         this.context = context;
         this.list = list;
-        Log.i(TAG,list.size()+" size");
     }
 
     public void setListener(CartListener listener) {
@@ -69,6 +69,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         public void bind(ImageClass imageClass, int position){
             binding.setData(imageClass);
             binding.executePendingBindings();
+
+
             Glide.with(context).load(imageClass.getImage())
                     .placeholder(R.drawable.picture)
                     .into(binding.image);

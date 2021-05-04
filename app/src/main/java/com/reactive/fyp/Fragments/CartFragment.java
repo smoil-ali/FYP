@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.databinding.adapters.AbsSpinnerBindingAdapter;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -17,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.reactive.fyp.Activities.CheckOutActivity;
+import com.reactive.fyp.Activities.OrderActivity;
 import com.reactive.fyp.Adapter.CartAdapter;
+import com.reactive.fyp.Adapter.OrderAdapter;
 import com.reactive.fyp.Interfaces.CartListener;
 import com.reactive.fyp.R;
 import com.reactive.fyp.Utils.Constants;
@@ -45,16 +49,25 @@ public class CartFragment extends Fragment implements CartListener {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_cart,container,false);
         binding.setVisibility(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
         binding.recycler.hasFixedSize();
+        binding.recycler.setLayoutManager(linearLayoutManager);
         binding.recycler.setItemAnimator(null);
 
 
         binding.refresher.setOnRefreshListener(() -> getCartData());
 
 
-        binding.buynow.setOnClickListener(v -> {
+        binding.orders.setOnClickListener(v -> {
+            openOrderScreen();
+        });
+
+        binding.done.setOnClickListener(v -> {
             openScreen();
         });
+
 
 
         return binding.getRoot();
@@ -71,9 +84,9 @@ public class CartFragment extends Fragment implements CartListener {
             list.addAll(Helper.fromStringToList(cartdata));
             setupRecyclerView();
             Log.i(TAG,list.size()+"");
-            binding.buynow.setVisibility(View.VISIBLE);
+            binding.done.setEnabled(true);
         }else {
-            binding.buynow.setVisibility(View.GONE);
+            binding.done.setEnabled(false);
             binding.setVisibility(false);
         }
         binding.refresher.setRefreshing(false);
@@ -113,6 +126,11 @@ public class CartFragment extends Fragment implements CartListener {
         cartClass.setList(list);
         Intent intent = new Intent(getContext(), CheckOutActivity.class);
         intent.putExtra(Constants.PARAMS,cartClass);
+        startActivity(intent);
+    }
+
+    void openOrderScreen(){
+        Intent intent = new Intent(getContext(), OrderActivity.class);
         startActivity(intent);
     }
 }

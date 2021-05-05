@@ -126,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     void openScreen(){
-        Intent intent = new Intent(this,DesignActivity.class);
+        Intent intent = new Intent(this,SignInActivitye.class);
         startActivity(intent);
         finish();
     }

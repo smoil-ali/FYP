@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 public class ImageClass extends BaseObservable implements Serializable {
     String id;
+    String ownerId;
     String image;
     String actualPrice;
     String formattedPrice;
@@ -95,6 +96,19 @@ public class ImageClass extends BaseObservable implements Serializable {
     public void setFormattedPrice(String formattedPrice) {
         this.formattedPrice = formattedPrice;
         notifyPropertyChanged(BR.formattedPrice);
+    }
+
+
+    @Bindable
+    public String getOwnerId() {
+        if (ownerId == null)
+            return "";
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+        notifyPropertyChanged(BR.ownerId);
     }
 
     @Override

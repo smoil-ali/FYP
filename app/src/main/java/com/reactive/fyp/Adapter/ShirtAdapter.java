@@ -11,21 +11,24 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.reactive.fyp.Interfaces.ShirtListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.model.ProductModel;
+import com.reactive.fyp.model.ProfileModel;
 
 import java.util.List;
 
 public class ShirtAdapter extends RecyclerView.Adapter<ShirtAdapter.ViewHolder> {
     Context context;
-    List<Drawable> list;
+    List<ProductModel> list;
     ShirtListener listener;
 
     public void setListener(ShirtListener listener) {
         this.listener = listener;
     }
 
-    public ShirtAdapter(Context context, List<Drawable> list) {
+    public ShirtAdapter(Context context, List<ProductModel> list) {
         this.context = context;
         this.list = list;
     }
@@ -40,13 +43,13 @@ public class ShirtAdapter extends RecyclerView.Adapter<ShirtAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.imageView.setImageDrawable(list.get(position));
-        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listener.OnShirtClick(list.get(position));
-            }
-        });
+        ProductModel model = list.get(position);
+        Glide.with(context).load(model.getImage())
+                .placeholder(R.drawable.picture)
+                .into(holder.imageView);
+
+        holder.relativeLayout.setOnClickListener(v ->
+                listener.OnShirtClick(model));
     }
 
     @Override

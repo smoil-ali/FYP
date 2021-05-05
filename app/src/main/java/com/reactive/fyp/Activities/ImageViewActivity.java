@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -63,6 +64,12 @@ public class ImageViewActivity extends AppCompatActivity {
         }
 
         binding.price.setText(imageClass.getPrice()+"-/Rs");
+
+        if (imageClass.getOwnerId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            binding.delete.setVisibility(View.VISIBLE);
+        }else {
+            binding.delete.setVisibility(View.GONE);
+        }
 
         binding.share.setOnClickListener(v -> {
             date=simpleDateFormat.format(new Date());

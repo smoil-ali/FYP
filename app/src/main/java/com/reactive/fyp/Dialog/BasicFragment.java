@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -35,8 +36,10 @@ import com.isseiaoki.simplecropview.util.Utils;
 import com.reactive.fyp.Activities.DesignActivity;
 import com.reactive.fyp.Interfaces.ImageListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.Utils.Constants;
 
 import java.io.File;
+import java.lang.invoke.ConstantCallSite;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -86,12 +89,18 @@ public class BasicFragment extends DialogFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.fragment_basic, null, false);
+    View view = inflater.inflate(R.layout.fragment_basic, null, false);
+    TextView textView = view.findViewById(R.id.price);
+    textView.setText(Constants.ImagePrice);
+    return view;
   }
 
   @Override
   public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+
+
+
     // bind Views
     bindViews(view);
 

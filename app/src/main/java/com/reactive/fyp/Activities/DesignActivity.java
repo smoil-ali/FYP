@@ -36,8 +36,11 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -129,6 +132,7 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
             onBackPressed();
         });
 
+        getImagePrice();
 
         imageMaskView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -519,16 +523,13 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
     void addImage(){
         String description;
         ImageClass imageClass = new ImageClass();
+        imageClass.setOwnerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         imageClass.setImage(downloadUrl);
         int total = Constants.FontPrice+Constants.stickerPrice+Constants.ImagePrice;
         imageClass.setPrice(total+"");
         imageClass.setActualPrice(total+"");
-        if (!Constants.DIRECTION_MSG.equals("Back")){
-            description = Constants.DIRECTION_MSG +"."+Constants.TYPE_MSG+"."+Constants.SLEEVE_MSG;
-        }else {
-            description = Constants.DIRECTION_MSG;
-        }
-        imageClass.setDescription(description);
+        imageClass.setDescription(Constants.DESCRIPTION);
+
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .push()
                 .setValue(imageClass)
@@ -547,5 +548,26 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
+    }
+
+    void getImagePrice(){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference();
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    long val = (long) snapshot.child("ImagePrice").getValue();
+                    Constants.ImagePrice = (int) val;
+                }else {
+                    Constants.ImagePrice = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i(TAG,error.getMessage());
+            }
+        });
     }
 }

@@ -91,7 +91,7 @@ public class BasicFragment extends DialogFragment {
                            Bundle savedInstanceState) {
     View view = inflater.inflate(R.layout.fragment_basic, null, false);
     TextView textView = view.findViewById(R.id.price);
-    textView.setText(Constants.ImagePrice);
+    textView.setText(Constants.ImagePrice+"");
     return view;
   }
 

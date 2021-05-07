@@ -58,6 +58,10 @@ public class ConfirmOrdreFragment extends Fragment implements OrderAdapterListen
         adapter.setListener(this);
         binding.recycler.setAdapter(adapter);
 
+        binding.back.setOnClickListener(v -> {
+            getActivity().onBackPressed();
+        });
+
         binding.refresher.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -68,6 +68,10 @@ public class CartFragment extends Fragment implements CartListener {
             openScreen();
         });
 
+        binding.back.setOnClickListener(v -> {
+            getActivity().onBackPressed();
+        });
+
 
 
         return binding.getRoot();

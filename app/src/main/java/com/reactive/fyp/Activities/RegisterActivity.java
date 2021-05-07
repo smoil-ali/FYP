@@ -72,6 +72,10 @@ public class RegisterActivity extends AppCompatActivity {
             chooseImage();
         });
 
+        binding.back.setOnClickListener(v -> {
+            onBackPressed();
+        });
+
     }
 
     void register(){

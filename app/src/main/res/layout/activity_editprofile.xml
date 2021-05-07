@@ -20,18 +20,31 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/purple_500"
         android:paddingHorizontal="@dimen/_8sdp"
         android:id="@+id/header"
         >
+
+
+        <ImageView
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:src="@drawable/next"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleX="-1"
+            android:id="@+id/back"
+            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/_20sdp"
             android:text="Edit Profile"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
@@ -43,7 +56,6 @@
         android:layout_height="0dp"
         android:id="@+id/body"
         app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintBottom_toBottomOf="parent"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -119,6 +131,7 @@
                 app:layout_constraintTop_toBottomOf="@id/email_container"
                 android:layout_marginTop="10dp"
                 android:id="@+id/done"
+                android:backgroundTint="@color/black"
                 android:visibility="@{visibility ? View.VISIBLE : View.INVISIBLE}"
                 />
 
@@ -133,6 +146,7 @@
                 android:layout_marginTop="10dp"
                 android:visibility="@{!visibility ? View.VISIBLE : View.GONE}"
                 android:progressTint="@color/purple_500"
+                android:indeterminateTint="@android:color/black"
                 />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

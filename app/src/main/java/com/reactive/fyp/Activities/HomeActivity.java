@@ -2,6 +2,7 @@ package com.reactive.fyp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,6 +12,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.reactive.fyp.Adapter.ViewPagerAdapter;
@@ -31,6 +34,13 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_home);
         binding.bottomNavigation.setOnNavigationItemSelectedListener(this);
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.main_color));
+
+
         if (savedInstanceState == null)
             binding.bottomNavigation.setSelectedItemId(R.id.news_feed);
 
@@ -52,6 +62,9 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
             case R.id.cart:
                 binding.pager.setCurrentItem(2);
+                return true;
+            case R.id.list_menu:
+                binding.pager.setCurrentItem(3);
                 return true;
         }
         return true;

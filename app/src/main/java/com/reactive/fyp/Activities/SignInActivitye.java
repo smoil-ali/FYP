@@ -59,7 +59,10 @@ public class SignInActivitye extends AppCompatActivity {
         binding.signUp.setOnClickListener(v -> {
             Intent intent = new Intent(SignInActivitye.this,RegisterActivity.class);
             startActivity(intent);
-            finish();
+        });
+
+        binding.back.setOnClickListener(v -> {
+            onBackPressed();
         });
     }
 

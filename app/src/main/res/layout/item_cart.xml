@@ -9,88 +9,123 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/_5sdp"
+    android:padding="@dimen/_10sdp"
     >
 
-    <androidx.cardview.widget.CardView
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_150sdp"
+        android:layout_height="@dimen/_100sdp"
         app:layout_constraintTop_toTopOf="parent"
-        app:cardCornerRadius="@dimen/_5sdp"
-        android:id="@+id/container"
-        app:cardElevation="@dimen/_50sdp"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/_25sdp"
             android:layout_height="match_parent"
-            android:padding="@dimen/_8sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/one"
+            />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_100sdp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/one"
+            app:layout_constraintEnd_toStartOf="@id/two"
+            android:id="@+id/container"
             >
-
-            <ImageView
-                android:layout_width="@dimen/_80sdp"
-                android:layout_height="0dp"
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:src="@drawable/picture"
-                android:id="@+id/image"
-                />
+                app:cardCornerRadius="@dimen/_5sdp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="@dimen/_3sdp"
+                >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{data.formattedPrice}"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/image"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_16sdp"
-                android:id="@+id/price"
-                />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/_8sdp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{data.formattedPrice}"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/_25sdp"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_16sdp"
+                        android:id="@+id/price"
+                        />
 
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{data.description}"
-                android:textColor="@color/black"
-                android:textSize="@dimen/_10sdp"
-                app:layout_constraintStart_toEndOf="@id/image"
-                app:layout_constraintTop_toBottomOf="@id/price"
-                android:layout_marginStart="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                />
+                    <TextView
+                        android:id="@+id/description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/price"
+                        android:text="@{data.description}"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_10sdp"
+                        app:layout_constraintTop_toBottomOf="@id/price"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        />
 
 
-            <com.travijuu.numberpicker.library.NumberPicker
-                android:id="@+id/number_picker"
-                android:layout_width="130dp"
-                android:layout_height="40dp"
-                numberpicker:unit="1"
-                numberpicker:custom_layout="@layout/number_picker_custom_layout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/trash"
-                android:backgroundTint="@color/purple_500"
-                />
+                    <com.travijuu.numberpicker.library.NumberPicker
+                        android:id="@+id/number_picker"
+                        android:layout_width="120dp"
+                        android:layout_height="40dp"
+                        app:max="100"
+                        numberpicker:unit="1"
+                        numberpicker:custom_layout="@layout/number_picker_custom_layout"
+                        app:layout_constraintStart_toEndOf="@id/price"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:backgroundTint="@color/purple_500"
+                        />
 
-            <ImageView
-                android:id="@+id/trash"
-                android:layout_width="@dimen/_25sdp"
-                android:layout_height="@dimen/_25sdp"
-                android:src="@drawable/trash_bin"
-                app:layout_constraintTop_toBottomOf="@id/number_picker"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.cardview.widget.CardView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/two"
+            />
+
+        <ImageView
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            app:layout_constraintStart_toEndOf="@id/one"
+            app:layout_constraintEnd_toStartOf="@id/container"
+            app:layout_constraintTop_toTopOf="@id/container"
+            android:src="@drawable/picture"
+            android:id="@+id/image"
+            android:scaleType="fitXY"
+            />
+
+        <ImageView
+            android:id="@+id/trash"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/cancelred"
+            app:layout_constraintTop_toTopOf="@id/container"
+            app:layout_constraintStart_toStartOf="@id/two"
+            app:layout_constraintEnd_toEndOf="@id/container"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

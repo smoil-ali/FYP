@@ -18,10 +18,14 @@
         app:layout_constraintTop_toTopOf="parent"
         app:cardCornerRadius="@dimen/_5sdp"
         android:id="@+id/container"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="@dimen/_3sdp"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="@dimen/_5sdp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"

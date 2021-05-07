@@ -61,7 +61,7 @@ public class ProfileFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_profile,container,false);
         binding.setVisibility(false);
         binding.recycler.hasFixedSize();
-        binding.recycler.setLayoutManager(new GridLayoutManager(getContext(),4));
+        binding.recycler.setLayoutManager(new GridLayoutManager(getContext(),3));
         adapter = new ImageAdapter(getContext(),list);
         binding.recycler.setAdapter(adapter);
         Log.i(TAG,"create...");
@@ -71,32 +71,6 @@ public class ProfileFragment extends Fragment {
             openScreen();
         });
 
-
-        binding.menu.setOnClickListener(v -> {
-
-            PopupMenu popupMenu = new PopupMenu(getContext(), v);
-            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @SuppressLint("NonConstantResourceId")
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.edit_profile:
-                            openEditProfile();
-                            return true;
-                        case R.id.logout:
-                            FirebaseAuth.getInstance().signOut();
-                            Helper.setLogin(getContext(),false);
-                            startActivity(new Intent(getContext(), SignInActivitye.class));
-                            getActivity().finish();
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-            popupMenu.inflate(R.menu.profile_menu);
-            popupMenu.show();
-        });
 
         getProfile();
         getImages();
@@ -116,6 +90,10 @@ public class ProfileFragment extends Fragment {
                                 .load(model.getImage())
                                 .placeholder(R.drawable.user)
                                 .into(binding.image);
+                        Glide.with(getContext())
+                                .load(model.getImage())
+                                .placeholder(R.drawable.user)
+                                .into(binding.userSectionImage);
                         binding.name.setText(model.getName());
                     }
 
@@ -166,10 +144,6 @@ public class ProfileFragment extends Fragment {
         startActivity(intent);
     }
 
-    void openEditProfile(){
-        Intent intent = new Intent(getContext(), EditprofileActivity.class);
-        intent.putExtra(Constants.PARAMS,model);
-        startActivity(intent);
-    }
+
 
 }

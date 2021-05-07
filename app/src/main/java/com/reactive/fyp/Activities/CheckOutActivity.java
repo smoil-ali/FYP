@@ -2,11 +2,14 @@ package com.reactive.fyp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.nfc.cardemulation.OffHostApduService;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,6 +42,13 @@ public class CheckOutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this,R.layout.activity_check_out);
         binding.setVisibility(true);
+
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.main_color));
+
         if (getIntent().getExtras() != null){
             cartClass = (CartClass)getIntent().getExtras().getSerializable(Constants.PARAMS);
             Log.i(TAG,cartClass.toString());
@@ -54,6 +64,10 @@ public class CheckOutActivity extends AppCompatActivity {
                 cartClass.setTimestamp(simpleDateFormat.format(new Date()));
                 addOrder();
             }
+        });
+
+        binding.back.setOnClickListener(v -> {
+            onBackPressed();
         });
 
         getTotal();
@@ -79,7 +93,7 @@ public class CheckOutActivity extends AppCompatActivity {
         for (ImageClass imageClass:cartClass.getList()){
             total = total + Integer.parseInt(imageClass.getPrice());
         }
-        binding.total.setText(total+"");
+        binding.total.setText(total+"-/Rs");
     }
 
     void addOrder(){

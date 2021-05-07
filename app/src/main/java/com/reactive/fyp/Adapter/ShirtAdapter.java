@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -59,7 +60,7 @@ public class ShirtAdapter extends RecyclerView.Adapter<ShirtAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        RelativeLayout relativeLayout;
+        ConstraintLayout relativeLayout;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView=itemView.findViewById(R.id.shirtIcon);

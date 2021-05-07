@@ -24,6 +24,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -119,6 +121,13 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         header.setOnClickListener(this);
         save.setOnClickListener(this);
         back.setOnClickListener(this);
+
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.main_color));
+
         if (savedInstanceState==null){
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.shirtContainer, new ShirtsFragment())

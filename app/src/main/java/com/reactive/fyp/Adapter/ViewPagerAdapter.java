@@ -8,12 +8,13 @@ import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.reactive.fyp.Fragments.CartFragment;
+import com.reactive.fyp.Fragments.MenuFragment;
 import com.reactive.fyp.Fragments.NewFeedFragment;
 import com.reactive.fyp.Fragments.ProfileFragment;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
-    private final int NUM_ITEMS = 3;
+    private final int NUM_ITEMS = 4;
 
     public ViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
@@ -30,6 +31,8 @@ public class ViewPagerAdapter extends FragmentStateAdapter {
                 return new ProfileFragment();
             case 2:
                 return new CartFragment();
+            case 3:
+                return new MenuFragment();
             default:
                 return null;
         }

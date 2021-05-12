@@ -105,7 +105,6 @@ public class CheckOutActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Helper.setCartData(null,CheckOutActivity.this);
                         onBackPressed();
                         Toast.makeText(CheckOutActivity.this, "Order Placed", Toast.LENGTH_SHORT).show();
                     }

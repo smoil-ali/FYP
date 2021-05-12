@@ -51,10 +51,8 @@ public class CartFragment extends Fragment implements CartListener {
         binding.setVisibility(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
         binding.recycler.hasFixedSize();
         binding.recycler.setLayoutManager(linearLayoutManager);
-        binding.recycler.setItemAnimator(null);
 
 
         binding.refresher.setOnRefreshListener(() -> getCartData());
@@ -103,10 +101,15 @@ public class CartFragment extends Fragment implements CartListener {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getCartData();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         Log.i(TAG,"resume");
-        getCartData();
     }
 
     @Override
@@ -119,8 +122,10 @@ public class CartFragment extends Fragment implements CartListener {
         Helper.setCartData(Helper.fromListToString(mlist),getContext());
         list.remove(pos);
         if (list.size() > 0){
+            binding.done.setEnabled(true);
             adapter.notifyDataSetChanged();
         }else {
+            binding.done.setEnabled(false);
             binding.setVisibility(false);
         }
     }

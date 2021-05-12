@@ -8,13 +8,24 @@
 
     <ImageView
         android:id="@+id/paint"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/rgb"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/colorpicker"
         app:layout_constraintStart_toStartOf="@id/colorpicker"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/_8sdp"
+        />
+
+    <ImageView
+        android:id="@+id/category"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/category"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/colorpicker"
+        app:layout_constraintEnd_toEndOf="@id/colorpicker"
+        android:layout_marginEnd="@dimen/_8sdp"
         />
 
     <com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar

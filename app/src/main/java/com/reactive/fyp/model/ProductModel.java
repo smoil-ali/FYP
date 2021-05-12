@@ -7,6 +7,7 @@ public class ProductModel implements Serializable {
     String image;
     String category;
     String catUid;
+    String subcat;
 
     public ProductModel() {
     }
@@ -48,5 +49,24 @@ public class ProductModel implements Serializable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public String getSubcat() {
+        return subcat;
+    }
+
+    public void setSubcat(String subcat) {
+        this.subcat = subcat;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductModel{" +
+                "uid='" + uid + '\'' +
+                ", image='" + image + '\'' +
+                ", category='" + category + '\'' +
+                ", catUid='" + catUid + '\'' +
+                ", subcat='" + subcat + '\'' +
+                '}';
     }
 }

@@ -90,10 +90,6 @@ public class ProfileFragment extends Fragment {
                                 .load(model.getImage())
                                 .placeholder(R.drawable.user)
                                 .into(binding.image);
-                        Glide.with(getContext())
-                                .load(model.getImage())
-                                .placeholder(R.drawable.user)
-                                .into(binding.userSectionImage);
                         binding.name.setText(model.getName());
                     }
 

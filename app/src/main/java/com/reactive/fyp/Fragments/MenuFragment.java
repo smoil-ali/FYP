@@ -1,5 +1,7 @@
 package com.reactive.fyp.Fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -49,8 +51,25 @@ public class MenuFragment extends Fragment {
             openEditProfile();
         });
 
+
+
         binding.logout.setOnClickListener(v -> {
-            logOut();
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Log Out")
+                    .setMessage("Do you want to log out?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            logOut();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
         });
 
         return binding.getRoot();

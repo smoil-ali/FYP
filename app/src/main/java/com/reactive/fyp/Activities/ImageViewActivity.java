@@ -1,16 +1,21 @@
 package com.reactive.fyp.Activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.bumptech.glide.Glide;
@@ -55,6 +60,11 @@ public class ImageViewActivity extends AppCompatActivity {
         progressDialog.setMessage("Wait, while your post is being uploading...");
         simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd HH-mm-ss");
 
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.black));
+
         if (getIntent().getExtras() != null){
             imageClass= (ImageClass) getIntent().getExtras().getSerializable(Constants.PARAMS);
             postClass.setImage(imageClass);
@@ -80,8 +90,27 @@ public class ImageViewActivity extends AppCompatActivity {
             addToCart();
         });
 
+        binding.back.setOnClickListener(v -> {
+            onBackPressed();
+        });
+
         binding.delete.setOnClickListener(v -> {
-            delete();
+            new AlertDialog.Builder(this)
+                    .setTitle("Delete")
+                    .setMessage("You want to delete this item from your gallery?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            delete();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
         });
 
     }

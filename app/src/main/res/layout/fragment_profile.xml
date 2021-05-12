@@ -30,6 +30,7 @@
                 android:layout_height="@dimen/_200sdp"
                 android:id="@+id/user_section"
                 app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/gradient_profile"
                 android:visibility="@{visibility ? View.VISIBLE : View.INVISIBLE}"
                 >
 

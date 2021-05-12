@@ -54,7 +54,7 @@
                     android:id="@+id/description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{data.description}"
+                    android:text="@{data.size}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/_10sdp"
                     app:layout_constraintStart_toEndOf="@id/image"

@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,6 +36,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.reactive.fyp.Activities.DesignActivity;
 import com.reactive.fyp.Adapter.ShirtAdapter;
 import com.reactive.fyp.Adapter.StickerAdapter;
+import com.reactive.fyp.Dialog.CategoryFragment;
+import com.reactive.fyp.Dialog.SizeFragment;
+import com.reactive.fyp.Interfaces.CategoryListener;
 import com.reactive.fyp.Interfaces.ShirtListener;
 import com.reactive.fyp.R;
 import com.reactive.fyp.Utils.Constants;
@@ -49,18 +53,20 @@ import java.util.Objects;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 
-public class ShirtsFragment extends Fragment implements ShirtListener {
+public class ShirtsFragment extends Fragment implements ShirtListener, CategoryListener {
 
     final String TAG = ShirtsFragment.class.getSimpleName();
     List<ProductModel> list=new ArrayList<>();
     DesignActivity designActivity;
     int currentColor;
-    ImageView paint ;
+    ImageView paint,category ;
     Button back;
     ColorPickerSeekBar colorPickerSeekBar;
     RecyclerView recyclerView;
     ShirtAdapter adapter;
     ProgressBar progressBar;
+    String cat = "Round Shirt";
+    String sub_cat = "Half Saleev";
 
     boolean isTrack;
     @Nullable
@@ -70,6 +76,7 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
         designActivity=(DesignActivity)getActivity();
         recyclerView=view.findViewById(R.id.recyclerView);
         progressBar = view.findViewById(R.id.progress);
+        category = view.findViewById(R.id.category);
         recyclerView.hasFixedSize();
         recyclerView.
                 setLayoutManager(new LinearLayoutManager(requireContext(),
@@ -110,12 +117,13 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
             }
         });
 
-        paint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialog();
-            }
+        paint.setOnClickListener(v -> openDialog());
+
+        category.setOnClickListener(v -> {
+            openCategoryDialog();
         });
+
+
 
 
         return view;
@@ -156,19 +164,24 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
     void getData(){
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = firebaseDatabase.getReference(Constants.PRODUCTS);
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.orderByChild("category").equalTo(cat).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
                     list.clear();
                     for (DataSnapshot snapshot1:snapshot.getChildren()){
                         ProductModel model = snapshot1.getValue(ProductModel.class);
-                        list.add(model);
+                        if (model.getSubcat().equals(sub_cat)){
+                            list.add(model);
+                        }
                     }
                     recyclerView.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                     if (list.size() > 0){
-                        Log.i(TAG,list.size()+"");
+                        Log.i(TAG,list.get(0).toString()+"");
+                        Glide.with(getContext())
+                                .load(list.get(0).getImage())
+                                .into(designActivity.home_shirt);
                         adapter.notifyDataSetChanged();
                     }else {
                         Toast.makeText(designActivity, "Data not Available", Toast.LENGTH_SHORT).show();
@@ -189,5 +202,20 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
                 Log.i(TAG,error.getMessage());
             }
         });
+    }
+
+    private void openCategoryDialog(){
+        FragmentManager fm = getChildFragmentManager();
+        CategoryFragment alertDialog = new CategoryFragment();
+        alertDialog.setListener(this);
+        alertDialog.show(fm, "fragment_category");
+    }
+
+    @Override
+    public void onCategory(String main, String sub) {
+        Log.i(TAG,main+" "+sub);
+        cat = main;
+        sub_cat = sub;
+        getData();
     }
 }

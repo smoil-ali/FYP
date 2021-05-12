@@ -49,16 +49,19 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.reactive.fyp.Dialog.BasicFragment;
 import com.reactive.fyp.Dialog.InputText;
+import com.reactive.fyp.Dialog.SizeFragment;
 import com.reactive.fyp.Fragments.ShirtsFragment;
 import com.reactive.fyp.Fragments.StickerFragment;
 import com.reactive.fyp.Fragments.TextFragment;
 import com.reactive.fyp.Interfaces.ImageListener;
 import com.reactive.fyp.Interfaces.InputTextListener;
+import com.reactive.fyp.Interfaces.SizeListener;
 import com.reactive.fyp.R;
 import com.reactive.fyp.Utils.Constants;
 import com.reactive.fyp.View.ImageMaskView;
 import com.reactive.fyp.View.MaskView;
 import com.reactive.fyp.View.MaskViewText;
+import com.reactive.fyp.databinding.FragmentMenuBinding;
 import com.reactive.fyp.model.ImageClass;
 
 import java.io.File;
@@ -67,7 +70,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class DesignActivity extends AppCompatActivity implements View.OnClickListener,ImageListener{
+public class DesignActivity extends AppCompatActivity implements View.OnClickListener,ImageListener,
+        SizeListener {
 
     private static final String TAG = DesignActivity.class.getSimpleName();
     public ImageView home_shirt,home_sticker,home_image,back;
@@ -85,6 +89,7 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
     float newRot = 0f;
     float oldDist = 1f;
     private PointF mid = new PointF();
+    String size;
 
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     StorageReference storageReference = firebaseStorage.getReference();
@@ -397,7 +402,10 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                 showAlertDialog();
                 break;
             case R.id.save_wrapper:
-                getBitMapFromView(header);
+                maskView.clear();
+                maskViewText.clear();
+                imageMaskView.clear();
+                openSizeDialog();
                 break;
             case R.id.back:
                 onBackPressed();
@@ -442,6 +450,13 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         BasicFragment alertDialog = BasicFragment.newInstance();
         alertDialog.setListener(this);
         alertDialog.show(fm, "fragment_alert");
+    }
+
+    private void openSizeDialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        SizeFragment alertDialog = new SizeFragment();
+        alertDialog.setListener(this);
+        alertDialog.show(fm, "fragment_size");
     }
 
 
@@ -530,7 +545,6 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void addImage(){
-        String description;
         ImageClass imageClass = new ImageClass();
         imageClass.setOwnerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         imageClass.setImage(downloadUrl);
@@ -538,6 +552,7 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         imageClass.setPrice(total+"");
         imageClass.setActualPrice(total+"");
         imageClass.setDescription(Constants.DESCRIPTION);
+        imageClass.setSize(size);
 
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .push()
@@ -578,5 +593,11 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                 Log.i(TAG,error.getMessage());
             }
         });
+    }
+
+    @Override
+    public void OnSize(String size) {
+        this.size = size;
+        getBitMapFromView(header);
     }
 }

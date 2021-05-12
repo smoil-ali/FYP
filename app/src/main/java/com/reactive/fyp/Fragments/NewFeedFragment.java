@@ -47,7 +47,6 @@ public class NewFeedFragment extends Fragment {
         binding = DataBindingUtil.inflate(inflater,R.layout.fragment_new_feed,container,false);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setReverseLayout(true);
-        linearLayoutManager.setStackFromEnd(true);
         binding.setVisibility(false);
         binding.recycler.hasFixedSize();
         binding.recycler.setLayoutManager(linearLayoutManager);

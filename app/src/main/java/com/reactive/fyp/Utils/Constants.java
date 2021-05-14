@@ -23,6 +23,10 @@ public class Constants {
     public static final String PRODUCTS = "Products";
     public static String DESCRIPTION;
     public static String Image;
+    public static String INFO;
+    public static final String CONTACT_US = "contact us";
+    public static final String ABOUT = "about";
+
 
 
 }

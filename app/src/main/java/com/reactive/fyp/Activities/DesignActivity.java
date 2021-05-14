@@ -61,7 +61,6 @@ import com.reactive.fyp.Utils.Constants;
 import com.reactive.fyp.View.ImageMaskView;
 import com.reactive.fyp.View.MaskView;
 import com.reactive.fyp.View.MaskViewText;
-import com.reactive.fyp.databinding.FragmentMenuBinding;
 import com.reactive.fyp.model.ImageClass;
 
 import java.io.File;

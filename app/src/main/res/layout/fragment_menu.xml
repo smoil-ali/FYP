@@ -72,17 +72,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="Log Out"
+            android:text="@string/about"
             android:textSize="@dimen/_16sdp"
             app:layout_constraintTop_toBottomOf="@id/one"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/logout"
+            android:id="@+id/about"
             />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_2sdp"
-            app:layout_constraintTop_toBottomOf="@id/logout"
+            app:layout_constraintTop_toBottomOf="@id/about"
             android:id="@+id/two"
             android:background="@drawable/placeholder_slider"
             />
@@ -125,21 +125,22 @@
             android:background="@drawable/placeholder_slider"
             />
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="@string/about"
+            android:text="Log Out"
             android:textSize="@dimen/_16sdp"
             app:layout_constraintTop_toBottomOf="@id/four"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/about"
+            android:id="@+id/logout"
             />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_2sdp"
-            app:layout_constraintTop_toBottomOf="@id/about"
+            app:layout_constraintTop_toBottomOf="@id/logout"
             android:id="@+id/five"
             android:background="@drawable/placeholder_slider"
             />

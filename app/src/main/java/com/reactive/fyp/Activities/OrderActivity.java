@@ -2,11 +2,14 @@ package com.reactive.fyp.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.reactive.fyp.Adapter.OrderViewpagerAdapter;
@@ -27,6 +30,11 @@ public class OrderActivity extends AppCompatActivity implements BottomNavigation
         if (savedInstanceState == null)
             binding.bottomNavigation.setSelectedItemId(R.id.pending);
 
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.main_color));
 
         adapter = new OrderViewpagerAdapter(this);
         binding.pager.setAdapter(adapter);

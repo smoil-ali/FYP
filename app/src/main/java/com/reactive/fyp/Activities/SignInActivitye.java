@@ -4,10 +4,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -46,6 +49,11 @@ public class SignInActivitye extends AppCompatActivity {
         binding.setData(model);
         binding.setVisibility(true);
 
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.main_color));
+
         mAuth = FirebaseAuth.getInstance();
 
 
@@ -59,7 +67,10 @@ public class SignInActivitye extends AppCompatActivity {
         binding.signUp.setOnClickListener(v -> {
             Intent intent = new Intent(SignInActivitye.this,RegisterActivity.class);
             startActivity(intent);
-            finish();
+        });
+
+        binding.back.setOnClickListener(v -> {
+            onBackPressed();
         });
     }
 

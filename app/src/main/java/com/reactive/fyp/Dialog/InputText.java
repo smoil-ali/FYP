@@ -7,21 +7,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 
 import com.reactive.fyp.Interfaces.InputTextListener;
 import com.reactive.fyp.R;
+import com.reactive.fyp.databinding.ItemInputText2Binding;
+import com.reactive.fyp.databinding.SizeLayoutBinding;
 
 public class InputText extends DialogFragment {
 
     final String TAG = InputText.class.getSimpleName();
     EditText input_text;
-    Button button;
+    TextView button;
     InputTextListener listener;
+    ItemInputText2Binding binding;
 
     public InputText() {
     }
@@ -33,28 +38,19 @@ public class InputText extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.input_text_layout,null,false);
-        input_text = view.findViewById(R.id.input_text);
-        button = view.findViewById(R.id.done);
+        binding = DataBindingUtil.inflate(inflater, R.layout.item_input_text2,container,false);
 
-        input_text.setHintTextColor(ContextCompat.getColor(getContext(),R.color.white));
-        button.setOnClickListener(v -> {
+
+        binding.inputText.setHintTextColor(ContextCompat.getColor(getContext(),R.color.white));
+        binding.done.setOnClickListener(v -> {
             dismiss();
-            listener.onInputText(input_text.getText().toString());
+            listener.onInputText(binding.inputText.getText().toString());
         });
-        return view;
+
+        binding.cancel.setOnClickListener(v -> {
+            dismiss();
+        });
+        return binding.getRoot();
     }
 
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog != null)
-        {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
-        }
-    }
 }

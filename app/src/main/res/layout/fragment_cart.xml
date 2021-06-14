@@ -16,20 +16,31 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/_50sdp"
             android:id="@+id/header"
-            android:background="@color/purple_500"
             app:layout_constraintTop_toTopOf="parent"
             android:paddingHorizontal="@dimen/_8sdp"
             >
+
+            <ImageView
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:src="@drawable/next"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:scaleX="-1"
+                android:id="@+id/back"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Cart"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textSize="@dimen/_20sdp"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 />
 
@@ -37,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Orders"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="@dimen/_20sdp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
@@ -63,7 +74,7 @@
                 android:layout_height="0dp"
                 android:id="@+id/refresher"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/done"
+                app:layout_constraintBottom_toTopOf="@id/done_container"
                 >
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -75,7 +86,7 @@
                         />
                     <androidx.recyclerview.widget.RecyclerView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:id="@+id/recycler"
                         android:visibility="@{visibility ? View.VISIBLE : View.GONE}"
                         />
@@ -84,14 +95,31 @@
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-
-            <com.google.android.material.button.MaterialButton
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/_70sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/done"
-                android:text="Buy Now"
-                />
+                app:cardCornerRadius="@dimen/_5sdp"
+                app:cardUseCompatPadding="true"
+                app:cardElevation="@dimen/_6sdp"
+                android:padding="@dimen/_20sdp"
+                android:id="@+id/done_container"
+                android:layout_marginHorizontal="@dimen/_10sdp"
+                >
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="@dimen/_200sdp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/done"
+                    android:text="Checkout"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/button_state_color"
+                    />
+
+            </androidx.cardview.widget.CardView>
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

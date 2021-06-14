@@ -24,6 +24,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -36,19 +38,24 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.reactive.fyp.Dialog.BasicFragment;
 import com.reactive.fyp.Dialog.InputText;
+import com.reactive.fyp.Dialog.SizeFragment;
 import com.reactive.fyp.Fragments.ShirtsFragment;
 import com.reactive.fyp.Fragments.StickerFragment;
 import com.reactive.fyp.Fragments.TextFragment;
 import com.reactive.fyp.Interfaces.ImageListener;
 import com.reactive.fyp.Interfaces.InputTextListener;
+import com.reactive.fyp.Interfaces.SizeListener;
 import com.reactive.fyp.R;
 import com.reactive.fyp.Utils.Constants;
 import com.reactive.fyp.View.ImageMaskView;
@@ -62,7 +69,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class DesignActivity extends AppCompatActivity implements View.OnClickListener,ImageListener{
+public class DesignActivity extends AppCompatActivity implements View.OnClickListener,ImageListener,
+        SizeListener {
 
     private static final String TAG = DesignActivity.class.getSimpleName();
     public ImageView home_shirt,home_sticker,home_image,back;
@@ -80,6 +88,7 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
     float newRot = 0f;
     float oldDist = 1f;
     private PointF mid = new PointF();
+    String size;
 
     FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     StorageReference storageReference = firebaseStorage.getReference();
@@ -116,6 +125,13 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         header.setOnClickListener(this);
         save.setOnClickListener(this);
         back.setOnClickListener(this);
+
+
+        Window window = getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this,R.color.main_color));
+
         if (savedInstanceState==null){
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.shirtContainer, new ShirtsFragment())
@@ -129,6 +145,7 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
             onBackPressed();
         });
 
+        getImagePrice();
 
         imageMaskView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -197,7 +214,6 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                         }
 
                         break;
-
                 }
                 return true;
             }
@@ -384,7 +400,10 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                 showAlertDialog();
                 break;
             case R.id.save_wrapper:
-                getBitMapFromView(header);
+                maskView.clear();
+                maskViewText.clear();
+                imageMaskView.clear();
+                openSizeDialog();
                 break;
             case R.id.back:
                 onBackPressed();
@@ -429,6 +448,13 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
         BasicFragment alertDialog = BasicFragment.newInstance();
         alertDialog.setListener(this);
         alertDialog.show(fm, "fragment_alert");
+    }
+
+    private void openSizeDialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        SizeFragment alertDialog = new SizeFragment();
+        alertDialog.setListener(this);
+        alertDialog.show(fm, "fragment_size");
     }
 
 
@@ -517,18 +543,15 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     void addImage(){
-        String description;
         ImageClass imageClass = new ImageClass();
+        imageClass.setOwnerId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         imageClass.setImage(downloadUrl);
         int total = Constants.FontPrice+Constants.stickerPrice+Constants.ImagePrice;
         imageClass.setPrice(total+"");
         imageClass.setActualPrice(total+"");
-        if (!Constants.DIRECTION_MSG.equals("Back")){
-            description = Constants.DIRECTION_MSG +"."+Constants.TYPE_MSG+"."+Constants.SLEEVE_MSG;
-        }else {
-            description = Constants.DIRECTION_MSG;
-        }
-        imageClass.setDescription(description);
+        imageClass.setDescription(Constants.DESCRIPTION);
+        imageClass.setSize(size);
+
         databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .push()
                 .setValue(imageClass)
@@ -547,5 +570,32 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 });
 
+    }
+
+    void getImagePrice(){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference();
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    long val = (long) snapshot.child("ImagePrice").getValue();
+                    Constants.ImagePrice = (int) val;
+                }else {
+                    Constants.ImagePrice = 0;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.i(TAG,error.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void OnSize(String size) {
+        this.size = size;
+        getBitMapFromView(header);
     }
 }

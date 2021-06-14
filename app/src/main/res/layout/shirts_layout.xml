@@ -1,102 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorback"
+    android:layout_gravity="center"
     >
 
     <ImageView
         android:id="@+id/paint"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@drawable/rgb"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/colorpicker"
         app:layout_constraintStart_toStartOf="@id/colorpicker"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="@dimen/_8sdp"
+        />
+
+    <ImageView
+        android:id="@+id/category"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/category"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/colorpicker"
+        app:layout_constraintEnd_toEndOf="@id/colorpicker"
+        android:layout_marginEnd="@dimen/_8sdp"
         />
 
     <com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/colorpicker"
+        app:layout_constraintTop_toBottomOf="@id/paint"
+        android:layout_marginTop="@dimen/_8sdp"
+        />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_grayon"
+        app:layout_constraintTop_toBottomOf="@id/colorpicker"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:padding="@dimen/_3sdp"
+        >
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
-
-
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/front"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Front"
-        app:layout_constraintTop_toBottomOf="@id/colorpicker"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/back"
-        app:layout_constraintEnd_toStartOf="@id/roundshirt"
-        />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back"
-        app:layout_constraintTop_toBottomOf="@id/front"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/vshirt"
-        />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/roundshirt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="R-Shirt"
-        app:layout_constraintTop_toBottomOf="@id/colorpicker"
-        app:layout_constraintStart_toEndOf="@id/front"
-        app:layout_constraintBottom_toTopOf="@id/back"
-        app:layout_constraintEnd_toStartOf="@id/fullsleeve"
-        />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/vshirt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="V-shirt"
-        app:layout_constraintTop_toBottomOf="@id/front"
-        app:layout_constraintStart_toEndOf="@id/back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/halfsleeve"
-        />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/fullsleeve"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="F-sleeve"
-        app:layout_constraintTop_toBottomOf="@id/colorpicker"
-        app:layout_constraintStart_toEndOf="@id/roundshirt"
-        app:layout_constraintBottom_toTopOf="@id/back"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"
         />
 
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/halfsleeve"
-        android:layout_width="wrap_content"
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="H-Sleeve"
-        app:layout_constraintTop_toBottomOf="@id/front"
-        app:layout_constraintStart_toEndOf="@id/vshirt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/recyclerView"
+        app:layout_constraintTop_toTopOf="parent"
         />
 
-
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,12 +9,14 @@ import java.io.Serializable;
 
 public class ImageClass extends BaseObservable implements Serializable {
     String id;
+    String ownerId;
     String image;
     String actualPrice;
     String formattedPrice;
     String price;
     String description;
     String qty;
+    String size;
 
     public ImageClass() {
     }
@@ -97,16 +99,43 @@ public class ImageClass extends BaseObservable implements Serializable {
         notifyPropertyChanged(BR.formattedPrice);
     }
 
+
+    @Bindable
+    public String getOwnerId() {
+        if (ownerId == null)
+            return "";
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+        notifyPropertyChanged(BR.ownerId);
+    }
+
+    @Bindable
+    public String getSize() {
+        if (size == null)
+            return "";
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+        notifyPropertyChanged(BR.size);
+    }
+
     @Override
     public String toString() {
         return "ImageClass{" +
                 "id='" + id + '\'' +
+                ", ownerId='" + ownerId + '\'' +
                 ", image='" + image + '\'' +
                 ", actualPrice='" + actualPrice + '\'' +
                 ", formattedPrice='" + formattedPrice + '\'' +
                 ", price='" + price + '\'' +
                 ", description='" + description + '\'' +
                 ", qty='" + qty + '\'' +
+                ", size='" + size + '\'' +
                 '}';
     }
 }

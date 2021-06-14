@@ -14,21 +14,36 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ak.android.widget.colorpickerseekbar.ColorPickerSeekBar;
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.reactive.fyp.Activities.DesignActivity;
 import com.reactive.fyp.Adapter.ShirtAdapter;
+import com.reactive.fyp.Adapter.StickerAdapter;
+import com.reactive.fyp.Dialog.CategoryFragment;
+import com.reactive.fyp.Dialog.SizeFragment;
+import com.reactive.fyp.Interfaces.CategoryListener;
 import com.reactive.fyp.Interfaces.ShirtListener;
 import com.reactive.fyp.R;
 import com.reactive.fyp.Utils.Constants;
+import com.reactive.fyp.model.ProductModel;
+import com.reactive.fyp.model.StickerModel;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
@@ -38,30 +53,47 @@ import java.util.Objects;
 import yuku.ambilwarna.AmbilWarnaDialog;
 
 
-public class ShirtsFragment extends Fragment implements ShirtListener {
+public class ShirtsFragment extends Fragment implements ShirtListener, CategoryListener {
 
     final String TAG = ShirtsFragment.class.getSimpleName();
-    List<Drawable> list=new ArrayList<>();
+    List<ProductModel> list=new ArrayList<>();
     DesignActivity designActivity;
     int currentColor;
-    ImageView paint ;
-    Button front,back,roundShirt,vShirt,fullsleeve,halfsleeve;
+    ImageView paint,category ;
+    Button back;
     ColorPickerSeekBar colorPickerSeekBar;
+    RecyclerView recyclerView;
+    ShirtAdapter adapter;
+    ProgressBar progressBar;
+    String cat = "Round Shirt";
+    String sub_cat = "Half Saleev";
+
     boolean isTrack;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view =getLayoutInflater().inflate(R.layout.shirts_layout,container,false);
         designActivity=(DesignActivity)getActivity();
+        recyclerView=view.findViewById(R.id.recyclerView);
+        progressBar = view.findViewById(R.id.progress);
+        category = view.findViewById(R.id.category);
+        recyclerView.hasFixedSize();
+        recyclerView.
+                setLayoutManager(new LinearLayoutManager(requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false));
 
         colorPickerSeekBar = view.findViewById(R.id.colorpicker);
         paint = view.findViewById(R.id.paint);
-        front = view.findViewById(R.id.front);
         back = view.findViewById(R.id.back);
-        roundShirt = view.findViewById(R.id.roundshirt);
-        vShirt = view.findViewById(R.id.vshirt);
-        fullsleeve = view.findViewById(R.id.fullsleeve);
-        halfsleeve = view.findViewById(R.id.halfsleeve);
+
+        adapter=new ShirtAdapter(requireContext(),list);
+        adapter.setListener(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+
+
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override
             public void onColorChanged(SeekBar seekBar, int color, boolean fromUser) {
@@ -85,86 +117,31 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
             }
         });
 
-        paint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openDialog();
-            }
+        paint.setOnClickListener(v -> openDialog());
+
+        category.setOnClickListener(v -> {
+            openCategoryDialog();
         });
 
-        front.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Constants.DIRECTION_MSG = "Front";
-                designActivity.home_shirt
-                        .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
-                        R.drawable.tshirt_v_template));
-            }
-        });
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Constants.DIRECTION_MSG = "Back";
-                designActivity.home_shirt
-                        .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
-                        R.drawable.tshirt_kids_template));
-            }
-        });
-
-        roundShirt.setOnClickListener(v -> {
-            Constants.TYPE_MSG = "Round";
-            designActivity.home_shirt
-                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
-                            R.drawable.tshirt_template));
-        });
-
-        vShirt.setOnClickListener(v -> {
-            Constants.TYPE_MSG = "V";
-            designActivity.home_shirt
-                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
-                            R.drawable.tshirt_v_template));
-        });
-
-        fullsleeve.setOnClickListener(v -> {
-            Constants.SLEEVE_MSG = "Full Sleeve";
-            designActivity.home_shirt
-                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
-                            R.drawable.fsleeve));
-        });
-
-        halfsleeve.setOnClickListener(v -> {
-            Constants.SLEEVE_MSG = "Half Sleeve";
-            designActivity.home_shirt
-                    .setImageDrawable(ContextCompat.getDrawable(Objects.requireNonNull(getContext()),
-                            R.drawable.tshirt_template));
-        });
 
 
         return view;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    void loadList(){
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt1));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt2));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt3));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt4));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt5));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt6));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt7));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt8));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt9));
-        list.add(ContextCompat.getDrawable(requireContext(),R.drawable.shirt10));
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        getData();
     }
 
     @Override
-    public void OnShirtClick(Drawable drawable) {
-        designActivity.home_shirt.setImageDrawable(drawable);
+    public void OnShirtClick(ProductModel model) {
+        Constants.DESCRIPTION = model.getCategory();
+        Glide.with(getContext())
+                .load(model.getImage())
+                .into(designActivity.home_shirt);
+
     }
 
     private void openDialog(){
@@ -182,5 +159,63 @@ public class ShirtsFragment extends Fragment implements ShirtListener {
             }
         });
         dialog.show();
+    }
+
+    void getData(){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference(Constants.PRODUCTS);
+        databaseReference.orderByChild("category").equalTo(cat).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    list.clear();
+                    for (DataSnapshot snapshot1:snapshot.getChildren()){
+                        ProductModel model = snapshot1.getValue(ProductModel.class);
+                        if (model.getSubcat().equals(sub_cat)){
+                            list.add(model);
+                        }
+                    }
+                    recyclerView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    if (list.size() > 0){
+                        Log.i(TAG,list.get(0).toString()+"");
+                        Glide.with(getContext())
+                                .load(list.get(0).getImage())
+                                .into(designActivity.home_shirt);
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        Toast.makeText(designActivity, "Data not Available", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(designActivity, "Data not Available", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(designActivity, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                recyclerView.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
+                Log.i(TAG,error.getMessage());
+            }
+        });
+    }
+
+    private void openCategoryDialog(){
+        FragmentManager fm = getChildFragmentManager();
+        CategoryFragment alertDialog = new CategoryFragment();
+        alertDialog.setListener(this);
+        alertDialog.show(fm, "fragment_category");
+    }
+
+    @Override
+    public void onCategory(String main, String sub) {
+        Log.i(TAG,main+" "+sub);
+        cat = main;
+        sub_cat = sub;
+        getData();
     }
 }

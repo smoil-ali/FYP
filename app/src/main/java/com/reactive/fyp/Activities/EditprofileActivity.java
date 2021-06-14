@@ -69,6 +69,10 @@ public class EditprofileActivity extends AppCompatActivity {
                 .placeholder(R.drawable.user)
                 .into(binding.image);
 
+        binding.back.setOnClickListener(v -> {
+            onBackPressed();
+        });
+
         binding.done.setOnClickListener(v -> {
             if (isValid()){
                 if (downloadUrl != null)

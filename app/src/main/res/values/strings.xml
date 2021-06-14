@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">FYP</string>
-
+    <string name="app_name">Art&amp;Shop</string>
+    <string name="about">About Art&amp;Design</string>
     <string name="button_allow">Allow</string>
     <string name="button_deny">Deny</string>
     <string name="permission_pick_rationale">READ_EXTERNAL_STORAGE permission is needed to pick image.</string>
@@ -9,4 +9,16 @@
     <string name="permission_denied_never_ask_again">Permission was denied with never ask again.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="aboutApp">The time people spend on their mobile devices is continuing to grow every year.
+        As our devices become more sophisticated,
+        the number of activities we can do on mobile is always growing,
+        meaning we’re more likely to use them with greater frequency.
+        Time spent with mobile apps is growing too and people like to shop online.
+        So on the basis of customer need we design an application for our customers named as “Art and shop”.
+        This app provides the customize designing of a T shirt .User can design his shirt in Different ways like
+        logo on his shirt write different text on shirt and put any picture on the shirt.
+        user can design the shirt’s front and back and then order online.
+        This application is user friendly and easy to use. Hopefully you will enjoy it.</string>
+    <string name="email">artandshop999@gmail.com</string>
+    <string name="number">03041619090</string>
 </resources>

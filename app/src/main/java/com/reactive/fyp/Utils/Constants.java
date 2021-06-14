@@ -20,5 +20,13 @@ public class Constants {
     public static int ImagePrice = 0;
     public static Typeface defaultFace;
     public static final String Order= "Order";
+    public static final String PRODUCTS = "Products";
+    public static String DESCRIPTION;
+    public static String Image;
+    public static String INFO;
+    public static final String CONTACT_US = "contact us";
+    public static final String ABOUT = "about";
+
+
 
 }

@@ -6,6 +6,38 @@
     android:orientation="vertical"
     >
 
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/_50sdp"
+      android:background="@color/windowBackground"
+      >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title"
+        android:text="Image Price"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_20sdp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/_8sdp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/price"
+        android:layout_toRightOf="@id/title"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:textSize="@dimen/_20sdp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:text="Price"
+        android:layout_centerVertical="true"
+        />
+
+  </RelativeLayout>
+
   <com.isseiaoki.simplecropview.CropImageView
       android:id="@+id/cropImageView"
       android:layout_width="match_parent"

@@ -131,4 +131,12 @@ public class MenuFragment extends Fragment {
         Intent intent = new Intent(getContext(), AboutActivity.class);
         startActivity(intent);
     }
+
+    void facebook(){
+        // Pending
+    }
+
+    void Instagram(){
+        // Pending
+    }
 }

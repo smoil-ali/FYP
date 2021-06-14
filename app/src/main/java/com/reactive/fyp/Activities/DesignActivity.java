@@ -214,7 +214,6 @@ public class DesignActivity extends AppCompatActivity implements View.OnClickLis
                         }
 
                         break;
-
                 }
                 return true;
             }

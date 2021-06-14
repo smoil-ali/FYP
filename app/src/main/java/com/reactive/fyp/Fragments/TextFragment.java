@@ -5,6 +5,8 @@ import android.content.res.ObbInfo;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class
-TextFragment extends Fragment implements TextClickListener , InputTextListener {
+TextFragment extends Fragment implements TextClickListener,InputTextListener {
 
     final String TAG = TextFragment.class.getSimpleName();
     RecyclerView recyclerView;
@@ -55,6 +57,8 @@ TextFragment extends Fragment implements TextClickListener , InputTextListener {
     ColorPickerSeekBar colorPickerSeekBar;
     ProgressBar progressBar;
     boolean isTrack;
+    EditText editText;
+    FloatingActionButton done;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,7 +76,6 @@ TextFragment extends Fragment implements TextClickListener , InputTextListener {
 
         recyclerView.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
-        showInputTextDialog();
         colorPickerSeekBar.setOnColorSeekbarChangeListener(new ColorPickerSeekBar.OnColorSeekBarChangeListener() {
             @Override
             public void onColorChanged(SeekBar seekBar, int color, boolean fromUser) {
@@ -94,7 +97,6 @@ TextFragment extends Fragment implements TextClickListener , InputTextListener {
                 isTrack = false;
             }
         });
-
 
         return view;
     }
@@ -177,8 +179,14 @@ TextFragment extends Fragment implements TextClickListener , InputTextListener {
         adapter.setListener(this);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        showInputTextDialog();
+    }
+
     private void showInputTextDialog() {
-        FragmentManager fm = getFragmentManager();
+        FragmentManager fm = designActivity.getSupportFragmentManager();
         InputText alertDialog = new InputText();
         alertDialog.setListener(this);
         alertDialog.show(fm, "fragment_inputText");
@@ -186,14 +194,13 @@ TextFragment extends Fragment implements TextClickListener , InputTextListener {
 
     @Override
     public void onInputText(String text) {
-        if (!text.trim().matches("")){
+        if (!text.isEmpty()){
             designActivity.maskViewText.setVisibility(View.VISIBLE);
             designActivity.maskViewText.setRotation(0);
             designActivity.maskViewText.setScaleY(1);
             designActivity.textView.setText(text);
             designActivity.textView.setTypeface(Constants.defaultFace);
             Constants.FontPrice = Integer.parseInt(fontList.get(0).getPrice());
-
         }
     }
 }

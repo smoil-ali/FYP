@@ -11,6 +11,7 @@
         android:id="@+id/container"
         app:cardElevation="@dimen/_3sdp"
         app:cardUseCompatPadding="true"
+        android:background="@color/white"
         >
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

@@ -52,9 +52,6 @@ public class NewFeedFragment extends Fragment {
         binding.recycler.setLayoutManager(linearLayoutManager);
         adapter = new PostAdapter(getContext(),list);
         binding.recycler.setAdapter(adapter);
-
-
-
         return binding.getRoot();
     }
 
